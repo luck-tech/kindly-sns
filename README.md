@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 優しいSNS
 
-## Getting Started
+## 概要
 
-First, run the development server:
+入力した文字が**優しい言葉**に変換されるSNS。
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 主な機能
+
+- ユーザーが入力した文字を優しい言葉に変換
+- 投稿／削除
+- コミュニティ参加
+- いいね
+- リツイート
+- ハッシュタグ
+- 検索
+- プロフィール編集
+- ログイン
+
+## 使用技術
+
+- **フロントエンド** : Next.js TypeScript TailwindCss
+- **バックエンド** : Next.js
+
+## ディレクトリ構成
+
+```
+.
+├──.next/
+├── app/
+│   ├── api/
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/
+├── hooks/
+├── lib/
+│   └── utils.ts
+├── node_modules/
+├── public/
+└── ... (その他設定ファイル)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## セットアップと実行方法
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. リポジトリをクローン  
+   githubからリポジトリのURLをコピーし、ローカルにクローン。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+git clone <リポジトリのURL>
+cd <リポジトリ名>
+```
 
-## Learn More
+2. 依存パッケージのインストール  
+   プロジェクトに必要なライブラリをpnpmでインストール。
 
-To learn more about Next.js, take a look at the following resources:
+```
+pnpm install
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. 環境変数ファイルを作成  
+   githubにアップロードされていない **.env.local**を手動で作成。  
+   プロジェクトの一番上の階層に **.env.local**という名前でファイルを作り、以下の内容をペーストする。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+DATABASE_URL=
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=
+```
 
-## Deploy on Vercel
+4. 開発サーバーの起動
+   ローカルサーバーを起動する。
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+pnpm run dev
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+起動後、ブラウザで http://localhost:3000 にアクセスすると、アプリケーションが表示されます。
