@@ -10,7 +10,7 @@ import {
 
 const Header = () => {
   return (
-    <div className="w-full h-16 px-6 py-2 flex justify-between border-b border-gray-200">
+    <header className="fixed w-full h-16 px-6 py-2 bg-white flex justify-between border-b border-gray-200">
       <Image
         src="/logo.png"
         alt=""
@@ -34,7 +34,7 @@ const Header = () => {
           <button className="text-red-500">ログアウト</button>
         </PopoverContent>
       </Popover>
-    </div>
+    </header>
   );
 };
 
