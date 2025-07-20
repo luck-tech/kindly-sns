@@ -11,16 +11,17 @@ export default function Login() {
         </p>
         <input
           type="email"
-          name=""
-          id=""
+          name="email"
+          id="email"
           placeholder="メールアドレス"
           className="w-[448px] bg-[#F5F2F2] mx-[12px] my-[16px] p-[16px] rounded-[12px] placeholder:text-[16px] placeholder:text-[#827066]"
         />
         <input
           type="password"
-          name=""
-          id=""
+          name="password"
+          id="password"
           placeholder="パスワード"
+          autoComplete="current-password"
           className="w-[448px] bg-[#F5F2F2] mx-[12px] my-[16px] p-[16px] rounded-[12px] placeholder:text-[16px] placeholder:text-[#827066]"
         />
         <Button variant="loginSignup">ログイン</Button>
