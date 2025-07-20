@@ -3,6 +3,11 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Image from "next/image";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,14 +42,22 @@ export default function RootLayout({
             height={500}
             className="h-full w-auto aspect-square"
           />
-          <Avatar>
-            <AvatarImage
-              src="https://github.com/shadcn.png"
-              alt="プロフィール画像"
-              className="h-full w-auto aspect-square rounded-full"
-            />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
+          <Popover>
+            <PopoverTrigger>
+              {" "}
+              <Avatar>
+                <AvatarImage
+                  src="https://github.com/shadcn.png"
+                  alt="プロフィール画像"
+                  className="h-full w-auto aspect-square rounded-full"
+                />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+            </PopoverTrigger>
+            <PopoverContent>
+              <button className="text-red-500">ログアウト</button>
+            </PopoverContent>
+          </Popover>
         </div>
         {children}
       </body>
