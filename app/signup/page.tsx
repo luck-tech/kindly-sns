@@ -23,10 +23,10 @@ export default function Signup() {
           placeholder="パスワード"
           className="w-[448px] bg-[#F5F2F2] mx-[12px] my-[16px] p-[16px] rounded-[12px] placeholder:text-[16px] placeholder:text-[#827066]"
         />
-        <Button variant="login_signup">登録</Button>
+        <Button variant="loginSignup">登録</Button>
         <a
           href="/login"
-          className="pt-[4px] pb-[12px] px-[16px] text-[14px] text-[#827066]"
+          className="cursor-pointer pt-[4px] pb-[12px] px-[16px] text-[14px] text-[#827066]"
         >
           既にアカウントをお持ちですか？ ログイン
         </a>
