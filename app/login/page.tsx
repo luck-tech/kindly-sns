@@ -28,7 +28,7 @@ export default function Login() {
           href="/signup"
           className="cursor-pointer pt-[4px] pb-[12px] px-[16px] text-[14px] text-[#827066]"
         >
-          既にアカウントをお持ちですか？ 登録
+          アカウントをお持ちでないですか？ 登録
         </a>
       </div>
     </div>
