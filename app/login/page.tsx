@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Login() {
   return (
-    <div className="w-full flex px-[160px] py-20 font-hachimarupop">
+    <div className="w-full flex px-[160px] py-20">
       <div className="m-0 w-full flex flex-col h-[695px] justify-center items-center">
         <p className="pt-[20px] pb-[12px] px-[16px] text-[28px] text-center ">
           おかえりなさい
