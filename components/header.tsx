@@ -7,7 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { hachiMaruPop } from "@/app/fonts";
+import { hachiMaruPop } from "@/app/layout";
 
 const Header = () => {
   return (
@@ -32,7 +32,7 @@ const Header = () => {
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
         </PopoverTrigger>
-        <PopoverContent className={hachiMaruPop.className}>
+        <PopoverContent className={`${hachiMaruPop.className} mr-4`}>
           <button
             className="text-red-500 cursor-pointer"
             type="button"
