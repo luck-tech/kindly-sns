@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Camera, Loader2, CheckCircle2 } from 'lucide-react';
 import {
   Dialog,
@@ -50,6 +50,21 @@ export default function Profile() {
     }
   };
 
+  useEffect(() => {
+    return () => {
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
+  }, [imagePreview]);
+
+  const renderProfileImage = () => {
+    if (imagePreview) {
+      return<img src={imagePreview} alt="Profile Preview" className="w-full h-full rounded-full object-cover" />;
+    }
+    return <Camera className="w-6 h-6 text-gray-500" />;
+  };
+
   const renderForm = () => (
     <>
       <DialogHeader>
@@ -58,13 +73,24 @@ export default function Profile() {
       <div className="mt-4 flex flex-col items-center gap-5">
         <div className="flex flex-col items-center gap-5 w-full">
           <div onClick={handleImageClick} className="relative w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer hover:bg-gray-300">
-            {imagePreview ? (<img src={imagePreview} alt="Profile Preview" className="w-full h-full rounded-full object-cover" />) : (<Camera className="w-6 h-6 text-gray-500" />)}
+            {renderProfileImage()}
             <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*" />
           </div>
-          <input type="text" placeholder="名前を入力" value={name} onChange={(e) => setName(e.target.value)} className={`border px-2 py-1 rounded w-[80%] ${hachiMaruPop.className}`} />
+          <input
+            type="text"
+            placeholder="名前を入力"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className={`border px-2 py-1 rounded w-[80%] ${hachiMaruPop.className}`}
+          />
         </div>
         <div className="flex justify-end w-[80%]">
-          <button type="button" onClick={handleRegister} disabled={isSaving} className={`bg-[#EBC2AD] rounded-lg px-3 py-2 flex items-center justify-center w-20 h-10 ${hachiMaruPop.className} disabled:opacity-50`}>
+          <button
+            type="button"
+            onClick={handleRegister}
+            disabled={isSaving}
+            className={`bg-[#EBC2AD] rounded-lg px-3 py-2 flex items-center justify-center w-20 h-10 cursor-pointer${hachiMaruPop.className} disabled:opacity-50`}
+          >
             {isSaving ? (<Loader2 className="animate-spin" />) : ('登録')}
           </button>
         </div>
