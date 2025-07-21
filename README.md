@@ -28,9 +28,8 @@
 ├──.next/
 ├── app/
 │   ├── api/
-│   ├── globals.css
-│   ├── layout.tsx
-│   └── page.tsx
+│   ├── (auth)
+│   ├── (main)
 ├── components/
 ├── hooks/
 ├── lib/
