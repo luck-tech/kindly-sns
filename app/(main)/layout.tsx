@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { Hachi_Maru_Pop } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import Header from "@/components/header";
 
 export const hachiMaruPop = Hachi_Maru_Pop({
   weight: "400",
+  variable: "--font-hachi-marupop",
   subsets: ["latin"],
-  display: "swap",
-  variable: "--font-hachi-maru-pop",
 });
 
 export const metadata: Metadata = {
@@ -22,9 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${hachiMaruPop.variable} antialiased`}>
+      <body className={`${hachiMaruPop.className} antialiased`}>
         <Header />
-        <main className="pt-16">{children}</main>
+        {children}
       </body>
     </html>
   );
