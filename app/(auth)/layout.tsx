@@ -1,13 +1,6 @@
 import type { Metadata } from "next";
-import { Hachi_Maru_Pop } from "next/font/google";
-import "./globals.css";
-import Header from "@/components/header";
-
-export const hachiMaruPop = Hachi_Maru_Pop({
-  weight: "400",
-  variable: "--font-hachi-marupop",
-  subsets: ["latin"],
-});
+import "../globals.css";
+import { hachiMaruPop } from "@/app/(main)/layout";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,8 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${hachiMaruPop.variable} antialiased`}>
-        <Header />
+      <body className={`${hachiMaruPop.className} antialiased`}>
         {children}
       </body>
     </html>
