@@ -1,16 +1,7 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Hachi_Maru_Pop } from "next/font/google";
+import { Hachi_Maru_Pop } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import Header from "@/components/header";
 
 const hachiMaruPop = Hachi_Maru_Pop({
   weight: "400",
@@ -30,9 +21,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${hachiMaruPop.variable} antialiased`}
-      >
+      <body className={`${hachiMaruPop.variable} antialiased`}>
+        <Header />
         {children}
       </body>
     </html>
