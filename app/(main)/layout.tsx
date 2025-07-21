@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${hachiMaruPop.className} antialiased`}>
         <Header />
-        {children}
+        <main className="pt-16">{children}</main>
       </body>
     </html>
   );
