@@ -14,6 +14,8 @@ const buttonVariants = cva(
           "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90",
         loginSignup:
           "cursor-pointer h-10 w-full max-w-[480px] rounded-[20px] bg-[#EBC2AD] px-4 hover:bg-[#d4a993]",
+        homePost:
+          "cursor-pointer h-[40px] w-full w-[84px] rounded-[20px] bg-[#EBC2AD] px-4 hover:bg-[#d4a993]",
         destructive:
           "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
