@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { global } from "styled-jsx/css";
 import { PostList } from "@/components/post";
 
-export default function home() {
+export default function Home() {
   return (
     <div className="w-full flex px-[160px] py-[50px]">
       <div className="m-0 w-full flex flex-col h-[695px] items-left gap-[10px]">
