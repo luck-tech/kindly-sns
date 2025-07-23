@@ -1,6 +1,5 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { global } from "styled-jsx/css";
 import { PostList } from "@/components/post";
 
 export default function Home() {
@@ -10,7 +9,7 @@ export default function Home() {
         <p className="text-[28px]">ホーム</p>
         <form
           action=""
-          className="px-[20px] py-[10px] flex border border-[1px] rounded-[20px]"
+          className="px-[20px] py-[10px] flex border-[1px] rounded-[20px]"
         >
           <textarea
             name="new_post"
