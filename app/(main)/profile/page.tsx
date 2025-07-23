@@ -1,12 +1,12 @@
 import ProfileEditModal from "@/components/profile-edit-modal";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { PostList } from "@/components/post"
+import { PostList } from "@/components/post";
 
 export default function Profile() {
   return (
-    <div className = "flex flex-col items-center mt-[36px]">
-      <Avatar className = "flex justify-center w-[128px] h-[128px]">
+    <div className="flex flex-col items-center mt-[36px]">
+      <Avatar className="flex justify-center w-[128px] h-[128px]">
         <AvatarImage
           src="https://github.com/shadcn.png"
           alt="プロフィール画像"
@@ -14,9 +14,9 @@ export default function Profile() {
         />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
-      <div className = "mt-[16px] flex flex-col items-center">
-        <p className = "text-[22px] text-[#171412]">アリサ コーピー</p>
-        <p className = "text-[16px] text-[#827066]">@alisacooper</p>
+      <div className="mt-[16px] flex flex-col items-center">
+        <p className="text-[22px] text-[#171412]">アリサ コーピー</p>
+        <p className="text-[16px] text-[#827066]">@alisacooper</p>
       </div>
       <ProfileEditModal>
         <button

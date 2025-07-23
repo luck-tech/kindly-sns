@@ -14,7 +14,7 @@ type PostType = {
 };
 
 const initialDate: Date = new Date("2025-07-20");
-const secondDate: Date = new Date("2025-07-22")
+const secondDate: Date = new Date("2025-07-22");
 
 // 自分の投稿のモックデータ
 const mockSelfPosts: PostType[] = [
@@ -36,13 +36,12 @@ const mockSelfPosts: PostType[] = [
       username: "tanaka_taro",
       avatarUrl: "https://github.com/shadcn.png",
     },
-    content: "今日いただいたわりに心から感謝しています。これは、たとえ小さな情のある行為でも大きな違いを生むことができることを思い出させます。もっと優しさを広げましょう！",
+    content:
+      "今日いただいたわりに心から感謝しています。これは、たとえ小さな情のある行為でも大きな違いを生むことができることを思い出させます。もっと優しさを広げましょう！",
     likes: 32,
     date: secondDate,
   },
 ];
-
-
 
 // いいねした投稿のモックデータ
 const mockLikedPosts: PostType[] = [
@@ -53,23 +52,30 @@ const mockLikedPosts: PostType[] = [
       username: "suzuki_ichiro",
       avatarUrl: "https://github.com/vercel.png",
     },
-    content: "今日いただいたわりに心から感謝しています。これは、たとえ小さな情のある行為でも大きな違いを生むことができることを思い出させます。もっと優しさを広げましょう！",
+    content:
+      "今日いただいたわりに心から感謝しています。これは、たとえ小さな情のある行為でも大きな違いを生むことができることを思い出させます。もっと優しさを広げましょう！",
     likes: 128,
     date: initialDate,
   },
 ];
 
-
 export const PostList = ({ isSelfPost }: { isSelfPost: boolean }) => {
-
   const posts: PostType[] = isSelfPost ? mockSelfPosts : mockLikedPosts;
+  const today = new Date();
+  const startOfToday = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
 
   return (
     <div>
       {posts.map((post) => {
-        const today = new Date();
-        const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-        const startOfTarget = new Date(post.date.getFullYear(), post.date.getMonth(), post.date.getDate());
+        const startOfTarget = new Date(
+          post.date.getFullYear(),
+          post.date.getMonth(),
+          post.date.getDate()
+        );
         const diffInMs = startOfToday.getTime() - startOfTarget.getTime();
         const daysAgo = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 
@@ -77,9 +83,7 @@ export const PostList = ({ isSelfPost }: { isSelfPost: boolean }) => {
           <div key={post.id} className="flex px-[16px] py-[12px]">
             <Avatar className="cursor-pointer">
               <AvatarImage src={post.author.avatarUrl} />
-              <AvatarFallback>
-                {post.author.name.slice(0, 2)}
-              </AvatarFallback>
+              <AvatarFallback>{post.author.name.slice(0, 2)}</AvatarFallback>
             </Avatar>
             <div className="flex flex-col w-full ml-[16px]">
               <div className="flex items-center gap-[12px]">
@@ -97,4 +101,4 @@ export const PostList = ({ isSelfPost }: { isSelfPost: boolean }) => {
       })}
     </div>
   );
-}
+};
