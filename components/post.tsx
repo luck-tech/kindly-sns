@@ -12,10 +12,11 @@ type PostType = {
   likes: number;
   date: Date;
 };
+//表示モード
+export type ViewMode = "self" | "like" | "latest";
 
 const initialDate: Date = new Date("2025-07-20");
 const secondDate: Date = new Date("2025-07-22");
-
 // 自分の投稿のモックデータ
 const mockSelfPosts: PostType[] = [
   {
@@ -59,8 +60,24 @@ const mockLikedPosts: PostType[] = [
   },
 ];
 
-export const PostList = ({ isSelfPost }: { isSelfPost: boolean }) => {
-  const posts: PostType[] = isSelfPost ? mockSelfPosts : mockLikedPosts;
+export const PostList = ({ mode }: { mode: ViewMode }) => {
+  // モードに応じて表示する投稿を決定
+  let posts: PostType[];
+  if (mode === "self") {
+    posts = mockSelfPosts;
+  } else if (mode === "like") {
+    posts = mockLikedPosts;
+  } else {
+    // "latest": 全投稿をまとめる
+    posts = [...mockSelfPosts, ...mockLikedPosts];
+  }
+
+  // 日付の降順（最新から）にソート
+  const sortedPosts = [...posts].sort(
+    (a, b) => b.date.getTime() - a.date.getTime()
+  );
+
+  // 今日の00:00を基準に「何日前」を計算
   const today = new Date();
   const startOfToday = new Date(
     today.getFullYear(),
@@ -70,7 +87,7 @@ export const PostList = ({ isSelfPost }: { isSelfPost: boolean }) => {
 
   return (
     <div>
-      {posts.map((post) => {
+      {sortedPosts.map((post) => {
         const startOfTarget = new Date(
           post.date.getFullYear(),
           post.date.getMonth(),

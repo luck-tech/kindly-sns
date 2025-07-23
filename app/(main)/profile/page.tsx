@@ -1,7 +1,7 @@
-import ProfileEditModal from "@/components/profile-edit-modal";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { PostList } from "@/components/post";
+import ProfileEditModal from "@/components/profile-edit-modal";
 
 export default function Profile() {
   return (
@@ -32,10 +32,10 @@ export default function Profile() {
           <TabsTrigger value="like">いいね</TabsTrigger>
         </TabsList>
         <TabsContent value="self">
-          <PostList isSelfPost={true} />
+          <PostList mode="self" />
         </TabsContent>
         <TabsContent value="like">
-          <PostList isSelfPost={false} />
+          <PostList mode="like" />
         </TabsContent>
       </Tabs>
     </div>
