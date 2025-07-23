@@ -75,7 +75,7 @@ export const PostList = ({ isSelfPost }: { isSelfPost: boolean }) => {
 
         return (
           <div key={post.id} className="flex px-[16px] py-[12px]">
-            <Avatar>
+            <Avatar className="cursor-pointer">
               <AvatarImage src={post.author.avatarUrl} />
               <AvatarFallback>
                 {post.author.name.slice(0, 2)}
@@ -88,7 +88,7 @@ export const PostList = ({ isSelfPost }: { isSelfPost: boolean }) => {
               </div>
               <p className="text-gray-800">{post.content}</p>
               <div className="flex items-center mt-[8px] text-gray-500 gap-[8px]">
-                <ThumbsUp className="w-[20px] h-[20px] text-[14px] text-[#827066]" />
+                <ThumbsUp className="w-[20px] h-[20px] text-[14px] text-[#827066] cursor-pointer" />
                 <p className="text-[14px] text-[#827066]">{post.likes}</p>
               </div>
             </div>
