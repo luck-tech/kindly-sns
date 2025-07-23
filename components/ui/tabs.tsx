@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import * as TabsPrimitive from "@radix-ui/react-tabs"
+import * as React from "react";
+import * as TabsPrimitive from "@radix-ui/react-tabs";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 function Tabs({
   className,
@@ -15,7 +15,7 @@ function Tabs({
       className={cn("ml-[12px] flex flex-col", className)}
       {...props}
     />
-  )
+  );
 }
 
 function TabsList({
@@ -26,12 +26,12 @@ function TabsList({
     <TabsPrimitive.List
       data-slot="tabs-list"
       className={cn(
-        "flex h-9 w-full items-center gap-[32px] border-b border-b-[1px] border-b-[#e3dede] pl-[16px] pb-[16px] mb-[12px]",
+        "flex h-9 w-full items-center gap-[32px] border-b-[1px] border-b-[#e3dede] pl-[16px] pb-[16px] mb-[12px]",
         className
       )}
       {...props}
     />
-  )
+  );
 }
 
 function TabsTrigger({
@@ -47,7 +47,7 @@ function TabsTrigger({
       )}
       {...props}
     />
-  )
+  );
 }
 
 function TabsContent({
@@ -60,7 +60,7 @@ function TabsContent({
       className={cn("flex-1 outline-none", className)}
       {...props}
     />
-  )
+  );
 }
 
-export { Tabs, TabsList, TabsTrigger, TabsContent }
+export { Tabs, TabsList, TabsTrigger, TabsContent };
