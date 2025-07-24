@@ -3,7 +3,7 @@ import { Hachi_Maru_Pop } from "next/font/google";
 import "../globals.css";
 import Header from "@/components/header";
 
-export const hachiMaruPop = Hachi_Maru_Pop({
+const hachiMaruPop = Hachi_Maru_Pop({
   weight: "400",
   variable: "--font-hachi-marupop",
   subsets: ["latin"],
