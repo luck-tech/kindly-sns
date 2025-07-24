@@ -1,0 +1,185 @@
+openapi: 3.0.3
+info:
+  title: 優しいSNS API
+  version: "1.0.0"
+  description: |
+    優しいSNSのバックエンドAPI仕様書。  
+    認証はJWT（auth-tokenクッキー）によるセッション管理。
+
+servers:
+  - url: http://localhost:3000
+
+tags:
+  - name: Auth
+    description: 認証・ユーザー登録
+  - name: Posts
+    description: 投稿
+
+paths:
+  /api/auth/register:
+    post:
+      tags: [Auth]
+      summary: ユーザー登録
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 6
+                username:
+                  type: string
+                  description: 任意。未指定時は「ユーザー」になる
+      responses:
+        "201":
+          description: アカウント作成成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  user:
+                    type: object
+                    properties:
+                      id: { type: string }
+                      email: { type: string }
+                      username: { type: string }
+                      userId: { type: string }
+        "400":
+          description: バリデーションエラー
+        "409":
+          description: メールアドレス重複
+        "500":
+          description: サーバーエラー
+
+  /api/auth/login:
+    post:
+      tags: [Auth]
+      summary: ログイン
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        "200":
+          description: ログイン成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+                  user:
+                    type: object
+                    properties:
+                      id: { type: string }
+                      email: { type: string }
+                      username: { type: string }
+                      userId: { type: string }
+        "400":
+          description: バリデーションエラー
+        "401":
+          description: 認証失敗
+        "500":
+          description: サーバーエラー
+
+  /api/posts:
+    get:
+      tags: [Posts]
+      summary: 投稿一覧取得
+      responses:
+        "200":
+          description: 投稿一覧
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: { type: string }
+                        content: { type: string }
+                        created_at: { type: string, format: date-time }
+                        user:
+                          type: object
+                          properties:
+                            username: { type: string }
+                            user_id: { type: string }
+                            icon_url: { type: string }
+                        like_count: { type: integer }
+                  count: { type: integer }
+        "500":
+          description: サーバーエラー
+
+    post:
+      tags: [Posts]
+      summary: 新規投稿（優しい言葉に変換）
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [content]
+              properties:
+                content:
+                  type: string
+                  description: 投稿内容（攻撃的な内容もOK、AIで変換）
+      responses:
+        "201":
+          description: 投稿作成成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+                  post:
+                    type: object
+                    properties:
+                      id: { type: string }
+                      content: { type: string }
+                      created_at: { type: string, format: date-time }
+                      user:
+                        type: object
+                        properties:
+                          username: { type: string }
+                          user_id: { type: string }
+                          icon_url: { type: string }
+                      like_count: { type: integer }
+        "400":
+          description: バリデーションエラー
+        "401":
+          description: 認証エラー
+        "500":
+          description: サーバーエラー
+      security:
+        - cookieAuth: []
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: auth-token
