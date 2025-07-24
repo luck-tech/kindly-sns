@@ -23,6 +23,7 @@ env-copy:
 db-test:
 	@echo "🔌 データベース接続をテスト中..."
 	pnpm db:test
+	@echo "✅ データベースのチェックが完了しました！"
 
 db-migrate:
 	@echo "🗄️ データベースマイグレーション実行中..."
