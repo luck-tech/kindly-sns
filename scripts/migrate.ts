@@ -1,13 +1,9 @@
-import { Pool } from "pg";
+import { query, closePool } from "@/lib/db"; // 変更: Pool import削除、共通関数をimport
 import fs from "fs";
 import path from "path";
 import dotenv from "dotenv";
 
 dotenv.config();
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
 
 async function migrate() {
   try {
@@ -16,7 +12,7 @@ async function migrate() {
       "utf8"
     );
 
-    await pool.query(schemaSQL);
+    await query(schemaSQL);
     console.log("✅ テーブル作成完了");
 
     // 初期データがある場合
@@ -25,12 +21,12 @@ async function migrate() {
       "utf8"
     );
 
-    await pool.query(seedSQL);
+    await query(seedSQL);
     console.log("✅ 初期データ投入完了");
   } catch (error) {
     console.error("❌ マイグレーションエラー:", error);
   } finally {
-    await pool.end();
+    await closePool();
   }
 }
 
