@@ -1,6 +1,6 @@
 .PHONY: setup install env-copy db-test db-migrate
 
-setup: install env-copy db-test db-migrate
+setup: install env-copy db-test
 	@echo "🎉 セットアップが完了しました！"
 	@echo "開発サーバーを起動するには: pnpm dev"
 
