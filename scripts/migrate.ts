@@ -1,4 +1,4 @@
-import { query, closePool } from "@/lib/db"; // 変更: Pool import削除、共通関数をimport
+import { query, closePool } from "@/lib/db";
 import fs from "fs";
 import path from "path";
 import dotenv from "dotenv";
