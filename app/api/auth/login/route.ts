@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Pool } from "pg";
+import { query } from "@/lib/db";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,7 +16,7 @@ export async function POST(request: NextRequest) {
     }
 
     // ユーザーを検索
-    const result = await pool.query(
+    const result = await query(
       "SELECT id, email, password_hash, username, user_id FROM users WHERE email = $1",
       [email]
     );

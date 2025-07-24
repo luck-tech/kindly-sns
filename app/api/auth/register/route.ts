@@ -1,11 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Pool } from "pg";
+import { query } from "@/lib/db";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,10 +23,9 @@ export async function POST(request: NextRequest) {
     }
 
     // メールアドレスの重複チェック
-    const existingUser = await pool.query(
-      "SELECT id FROM users WHERE email = $1",
-      [email]
-    );
+    const existingUser = await query("SELECT id FROM users WHERE email = $1", [
+      email,
+    ]);
 
     if (existingUser.rows.length > 0) {
       return NextResponse.json(
@@ -47,7 +42,7 @@ export async function POST(request: NextRequest) {
     const userId = email.split("@")[0] + "_" + Date.now().toString(36);
 
     // ユーザーを作成
-    const result = await pool.query(
+    const result = await query(
       `INSERT INTO users (email, password_hash, username, user_id, icon_url) 
        VALUES ($1, $2, $3, $4, $5) 
        RETURNING id, email, username, user_id`,
