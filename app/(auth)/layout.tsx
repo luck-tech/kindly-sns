@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import "../globals.css";
-import { hachiMaruPop } from "@/app/(main)/layout";
+import { Hachi_Maru_Pop } from "next/font/google";
+
+const hachiMaruPop = Hachi_Maru_Pop({
+  weight: "400",
+  variable: "--font-hachi-marupop",
+  subsets: ["latin"],
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
