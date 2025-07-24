@@ -1,5 +1,50 @@
 import { NextRequest, NextResponse } from "next/server";
 import { query } from "@/lib/db";
+import jwt from "jsonwebtoken";
+import OpenAI from "openai";
+
+interface JWTPayload {
+  userId: number;
+  email: string;
+  username: string;
+  userIdString: string;
+  iat?: number;
+  exp?: number;
+}
+
+// OpenRouter経由でDeepSeek R1を使用
+const openai = new OpenAI({
+  baseURL: "https://openrouter.ai/api/v1",
+  apiKey: process.env.OPENROUTER_API_KEY,
+});
+
+// 改良されたプロンプト
+const KINDNESS_PROMPT = `
+You are a content transformer for a "Kind SNS" platform. Transform user posts into gentle, warm expressions following these rules:
+
+RULES:
+1. Replace harsh/aggressive words with gentle alternatives
+2. Convert negative emotions into constructive, positive expressions  
+3. Use casual, friendly tone (no formal language)
+4. Add appropriate emojis and softening characters like "〜" and "♪"
+5. Maintain original intent while making readers feel warm
+6. Keep length within ±50 characters of original
+
+EXAMPLES:
+Input: "マジでムカつく！上司が最悪すぎる"
+Output: "今日はちょっとモヤモヤしちゃった〜。上司とのコミュニケーションがうまくいかなくて困ってるの💦"
+
+Input: "死ね"  
+Output: "今日は疲れちゃった〜。少し休憩が必要かも🌸"
+
+IMPORTANT:
+- Output ONLY the transformed text
+- NO explanations or meta-commentary
+- NO analysis of the transformation process
+- If input is already kind, add more warmth
+
+Transform this text:
+`;
 
 export async function GET(request: NextRequest) {
   try {
@@ -45,6 +90,141 @@ export async function GET(request: NextRequest) {
     console.error("投稿取得エラー:", error);
     return NextResponse.json(
       { error: "投稿の取得に失敗しました" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    // 認証確認
+    const token = request.cookies.get("auth-token")?.value;
+
+    if (!token) {
+      return NextResponse.json(
+        { error: "ログインが必要です" },
+        { status: 401 }
+      );
+    }
+
+    // JWTトークンを検証
+    let decoded: JWTPayload;
+    try {
+      decoded = jwt.verify(
+        token,
+        process.env.JWT_SECRET || "fallback-secret"
+      ) as JWTPayload;
+    } catch (error) {
+      return NextResponse.json(
+        { error: "無効なトークンです" },
+        { status: 401 }
+      );
+    }
+
+    const { content } = await request.json();
+
+    // バリデーション
+    if (!content || content.trim().length === 0) {
+      return NextResponse.json(
+        { error: "投稿内容を入力してください" },
+        { status: 400 }
+      );
+    }
+
+    if (content.length > 500) {
+      return NextResponse.json(
+        { error: "投稿は500文字以内で入力してください" },
+        { status: 400 }
+      );
+    }
+
+    // DeepSeek R1変換
+    let transformedContent: string;
+
+    console.log("=== 変換処理開始 ===");
+    console.log("元の投稿:", content);
+
+    try {
+      const completion = await openai.chat.completions.create(
+        {
+          model: "deepseek/deepseek-r1:free",
+          messages: [
+            {
+              role: "user",
+              content: KINDNESS_PROMPT + "\n\n" + content,
+            },
+          ],
+          max_tokens: 800,
+          temperature: 0.7,
+          top_p: 0.9,
+          frequency_penalty: 0.1,
+          presence_penalty: 0.1,
+        },
+        {
+          timeout: 60000, // 60秒
+        }
+      );
+
+      const apiResponse = completion.choices[0]?.message?.content?.trim();
+      const finishReason = completion.choices[0]?.finish_reason;
+
+      console.log("📝 生のレスポンス:", apiResponse);
+      console.log("📏 レスポンス長:", apiResponse?.length);
+      console.log("🏁 終了理由:", finishReason);
+
+      // 品質チェックをスキップ
+      transformedContent = apiResponse || content;
+      console.log("✅ 変換結果:", transformedContent);
+    } catch (deepseekError) {
+      console.error("DeepSeek R1 API エラー:", deepseekError);
+      // DeepSeek R1 APIが失敗した場合は元の内容をそのまま使用
+      transformedContent = content;
+    }
+
+    console.log("📤 最終的な投稿内容:", transformedContent);
+    console.log("=== 変換処理終了 ===");
+
+    // データベースに投稿を保存
+    const result = await query(
+      `INSERT INTO posts (user_id, content) 
+       VALUES ($1, $2) 
+       RETURNING id, content, created_at`,
+      [decoded.userId, transformedContent]
+    );
+
+    const newPost = result.rows[0];
+
+    // ユーザー情報を取得
+    const userResult = await query(
+      `SELECT username, user_id, icon_url FROM users WHERE id = $1`,
+      [decoded.userId]
+    );
+
+    const user = userResult.rows[0];
+
+    const postResponse = {
+      id: newPost.id,
+      content: newPost.content,
+      created_at: newPost.created_at,
+      user: {
+        username: user.username,
+        user_id: user.user_id,
+        icon_url: user.icon_url,
+      },
+      like_count: 0,
+    };
+
+    return NextResponse.json(
+      {
+        message: "投稿が作成されました",
+        post: postResponse,
+      },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error("投稿作成エラー:", error);
+    return NextResponse.json(
+      { error: "サーバーエラーが発生しました" },
       { status: 500 }
     );
   }
