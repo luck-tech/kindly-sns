@@ -7,7 +7,7 @@ export async function POST(
   { params }: { params: { id: string } } // paramsでpostIdを取得
 ) {
   try {
-    const user = await getAuthUser(request); // ログイン中のユーザーを取得
+    const user = getAuthUser(request); // ログイン中のユーザーを取得
     if (!user) {
       // ログイン中のユーザーではなかったらエラーを返す。
       return NextResponse.json({ message: "認証エラー" }, { status: 401 });
@@ -36,7 +36,7 @@ export async function DELETE(
   { params }: { params: { id: string } } // paramsでpostIdを取得
 ) {
   try {
-    const user = await getAuthUser(request); // ログイン中のユーザーを取得
+    const user = getAuthUser(request); // ログイン中のユーザーを取得
     if (!user) {
       // ログイン中のユーザーではなかったらエラーを返す。
       return NextResponse.json(
