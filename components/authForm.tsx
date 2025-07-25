@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { authSchema } from "@/schema/auth";
 import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export type AuthFormProps = {
   type: "login" | "signup";
@@ -15,7 +16,7 @@ export default function AuthForm({ type }: AuthFormProps) {
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
     {}
   );
-
+  const router = useRouter();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -47,7 +48,11 @@ export default function AuthForm({ type }: AuthFormProps) {
             "ログインしました！"
           )
         );
-        // TODO: 成功後のリダイレクト
+        if (type === "signup") {
+          router.push("/login");
+        } else {
+          router.push("/");
+        }
       } else {
         toast.error(data.error || "処理に失敗しました。");
       }
