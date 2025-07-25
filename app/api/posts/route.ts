@@ -1,16 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { query } from "@/lib/db";
-import jwt from "jsonwebtoken";
+import { getAuthUser } from "@/lib/auth";
 import OpenAI from "openai";
-
-interface JWTPayload {
-  userId: number;
-  email: string;
-  username: string;
-  userIdString: string;
-  iat?: number;
-  exp?: number;
-}
 
 // OpenRouter経由でDeepSeek R1を使用
 const openai = new OpenAI({
@@ -97,28 +88,10 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    // 認証確認
-    const token = request.cookies.get("auth-token")?.value;
-
-    if (!token) {
-      return NextResponse.json(
-        { error: "ログインが必要です" },
-        { status: 401 }
-      );
-    }
-
-    // JWTトークンを検証
-    let decoded: JWTPayload;
-    try {
-      decoded = jwt.verify(
-        token,
-        process.env.JWT_SECRET || "fallback-secret"
-      ) as JWTPayload;
-    } catch (error) {
-      return NextResponse.json(
-        { error: "無効なトークンです" },
-        { status: 401 }
-      );
+    // ユーザー情報取得
+    const user = getAuthUser(request);
+    if (!user) {
+      return NextResponse.json({ error: "認証エラー" }, { status: 401 });
     }
 
     const { content } = await request.json();
@@ -172,7 +145,6 @@ export async function POST(request: NextRequest) {
       console.log("📏 レスポンス長:", apiResponse?.length);
       console.log("🏁 終了理由:", finishReason);
 
-      // 品質チェックをスキップ
       transformedContent = apiResponse || content;
       console.log("✅ 変換結果:", transformedContent);
     } catch (deepseekError) {
@@ -189,7 +161,7 @@ export async function POST(request: NextRequest) {
       `INSERT INTO posts (user_id, content) 
        VALUES ($1, $2) 
        RETURNING id, content, created_at`,
-      [decoded.userId, transformedContent]
+      [user.userId, transformedContent]
     );
 
     const newPost = result.rows[0];
@@ -197,19 +169,19 @@ export async function POST(request: NextRequest) {
     // ユーザー情報を取得
     const userResult = await query(
       `SELECT username, user_id, icon_url FROM users WHERE id = $1`,
-      [decoded.userId]
+      [user.userId]
     );
 
-    const user = userResult.rows[0];
+    const userInfo = userResult.rows[0];
 
     const postResponse = {
       id: newPost.id,
       content: newPost.content,
       created_at: newPost.created_at,
       user: {
-        username: user.username,
-        user_id: user.user_id,
-        icon_url: user.icon_url,
+        username: userInfo.username,
+        user_id: userInfo.user_id,
+        icon_url: userInfo.icon_url,
       },
       like_count: 0,
     };
@@ -222,7 +194,6 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error("投稿作成エラー:", error);
     return NextResponse.json(
       { error: "サーバーエラーが発生しました" },
       { status: 500 }
