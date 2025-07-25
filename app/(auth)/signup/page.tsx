@@ -66,12 +66,7 @@ export default function Signup() {
         <p className="pt-[20px] pb-[12px] px-[16px] text-[28px] text-center ">
           おかえりなさい
         </p>
-        <form
-          action=""
-          className="flex flex-col"
-          onSubmit={handleSubmit}
-          noValidate
-        >
+        <form className="flex flex-col" onSubmit={handleSubmit} noValidate>
           <input
             type="email"
             name="email"
