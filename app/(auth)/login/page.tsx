@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import "../../globals.css";
 import { Button } from "@/components/ui/button";
-import { loginSchema } from "@/lib/validation/loginSchema";
+import { authSchema } from "@/schema/auth";
 import { toast } from "react-toastify";
 
 export default function Login() {
@@ -17,7 +17,7 @@ export default function Login() {
     e.preventDefault();
 
     // ログイン用のスキーマでバリデーション
-    const result = loginSchema.safeParse({ email, password });
+    const result = authSchema.safeParse({ email, password });
 
     // バリデーションに失敗した場合の処理
     if (!result.success) {

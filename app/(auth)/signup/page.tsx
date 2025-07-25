@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import "../../globals.css";
 import { Button } from "@/components/ui/button";
-import { signupSchema } from "@/lib/validation/signupSchema";
+import { authSchema } from "@/schema/auth";
 import { toast } from "react-toastify";
 
 export default function Signup() {
@@ -16,7 +16,7 @@ export default function Signup() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const result = signupSchema.safeParse({ email, password });
+    const result = authSchema.safeParse({ email, password });
 
     // バリデーションに失敗した場合の処理
     if (!result.success) {
