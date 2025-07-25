@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     // JWTトークン生成
     const token = jwt.sign(
       {
-        userId: user.id,
+        userId: Number(user.id),
         email: user.email,
         username: user.username,
         userIdString: user.user_id,
