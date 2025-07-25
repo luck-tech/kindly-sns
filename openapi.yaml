@@ -14,6 +14,8 @@ tags:
     description: 認証・ユーザー登録
   - name: Posts
     description: 投稿
+  - name: Users
+    description: ユーザー管理
 
 paths:
   /api/auth/register:
@@ -176,6 +178,181 @@ paths:
           description: サーバーエラー
       security:
         - cookieAuth: []
+
+  /api/me:
+    get:
+      tags: [Users]
+      summary: 自分のプロフィール取得
+      responses:
+        "200":
+          description: プロフィール情報
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username: { type: string }
+                  user_id: { type: string }
+                  icon_url: { type: string }
+        "401":
+          description: 認証エラー
+        "404":
+          description: ユーザーが見つからない
+        "500":
+          description: サーバーエラー
+      security:
+        - cookieAuth: []
+
+    put:
+      tags: [Users]
+      summary: 自分のプロフィール更新
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  maxLength: 50
+                  description: 新しいユーザーネーム
+                icon_url:
+                  type: string
+                  description: 新しいアイコン画像URL
+                user_id:
+                  type: string
+                  maxLength: 20
+                  description: 新しいユーザーID（重複不可）
+      responses:
+        "200":
+          description: プロフィール更新成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+                  username: { type: string }
+                  user_id: { type: string }
+                  icon_url: { type: string }
+        "400":
+          description: バリデーションエラー
+        "401":
+          description: 認証エラー
+        "409":
+          description: ユーザーID重複
+        "500":
+          description: サーバーエラー
+      security:
+        - cookieAuth: []
+
+  /api/users/{id}:
+    get:
+      tags: [Users]
+      summary: 他ユーザーのプロフィール取得
+      parameters:
+        - name: id
+          in: path
+          required: true #なんかエラー出るけど直せないので無視
+          schema:
+            type: string
+          description: ユーザーID
+      responses:
+        "200":
+          description: プロフィール情報
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username: { type: string }
+                  user_id: { type: string }
+                  icon_url: { type: string }
+        "404":
+          description: ユーザーが見つからない
+        "500":
+          description: サーバーエラー
+
+  /api/users/{id}/posts:
+    get:
+      tags: [Users]
+      summary: ユーザーの投稿一覧取得
+      parameters:
+        - name: id
+          in: path
+          required: true #なんかエラー出るけど直せないので無視
+          schema:
+            type: string
+          description: ユーザーID
+      responses:
+        "200":
+          description: 投稿一覧
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: { type: string }
+                        content: { type: string }
+                        created_at: { type: string, format: date-time }
+                        user:
+                          type: object
+                          properties:
+                            username: { type: string }
+                            user_id: { type: string }
+                            icon_url: { type: string }
+                        like_count: { type: integer }
+                  count: { type: integer }
+        "404":
+          description: ユーザーが見つからない
+        "500":
+          description: サーバーエラー
+
+  /api/users/{id}/likes:
+    get:
+      tags: [Users]
+      summary: ユーザーがいいねした投稿一覧取得
+      parameters:
+        - name: id
+          in: path
+          required: true #なんかエラー出るけど直せないので無視
+          schema:
+            type: string
+          description: ユーザーID
+      responses:
+        "200":
+          description: いいねした投稿一覧
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: { type: string }
+                        content: { type: string }
+                        created_at: { type: string, format: date-time }
+                        user:
+                          type: object
+                          properties:
+                            username: { type: string }
+                            user_id: { type: string }
+                            icon_url: { type: string }
+                        like_count: { type: integer }
+                  count: { type: integer }
+        "404":
+          description: ユーザーが見つからない
+        "500":
+          description: サーバーエラー
 
 components:
   securitySchemes:
