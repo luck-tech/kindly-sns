@@ -29,20 +29,6 @@
 
 ```
 .
-<<<<<<< HEAD
-├──.next/
-├── app/
-│   ├── api/
-│   ├── (auth)
-│   ├── (main)
-├── components/
-├── hooks/
-├── lib/
-│   └── utils.ts
-├── node_modules/
-├── public/
-└── ... (その他設定ファイル)
-=======
 ├── app/                        # Next.js App Routerのページ・APIルート
 │   ├── api/                    # APIエンドポイント(Route Handlers)
 │   │   ├── auth/               # 認証関連API（login, registerなど）
@@ -66,7 +52,6 @@
 ├── Makefile                    # makeコマンド用タスク定義
 ├── middleware.ts               # Next.js用ミドルウェア（認証やリダイレクト等の共通処理）
 └── ...
->>>>>>> f0a0a8898ef350408a8b81c001153e776fcaf883
 ```
 
 ## セットアップと実行方法
