@@ -66,6 +66,7 @@ const Header = () => {
               className="p-2 text-sm text-red-500 cursor-pointer text-left hover:bg-gray-100 rounded-md"
               type="button"
               aria-label="Logout"
+              onClick={handleLogout}
             >
               ログアウト
             </button>
