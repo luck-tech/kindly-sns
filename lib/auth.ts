@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 import { z } from "zod";
 
 const JWTPayloadSchema = z.object({
-  userId: z.number(),
+  userId: z.string(),
   email: z.string().email(),
   username: z.string(),
   userIdString: z.string(),

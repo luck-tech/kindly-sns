@@ -23,6 +23,7 @@ async function PostFetch(): Promise<PostType[]> {
         return data;
     }
 
+
     console.error("API did not return an array:", data);
     return [];
 
@@ -35,14 +36,13 @@ async function PostFetch(): Promise<PostType[]> {
 
 
 export default async function AllPosts({ mode }: { mode: ViewMode }) {
-
   const posts = await PostFetch();
   const sortedPosts = [...posts].sort(
     (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
   return (
     <div className = "p-0 m-0">
-      <PostList allPosts={sortedPosts} mode={mode}/>
+      <PostList allPosts={sortedPosts} mode={mode}></PostList>
     </div>
   );
 }
