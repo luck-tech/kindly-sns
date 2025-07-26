@@ -89,7 +89,7 @@ export const PostList = ({
 
   return (
     <div>
-      {allPosts.map((post) => {
+      {posts.map((post) => {
         const postDate = new Date(post.created_at);
         let dateDisplayText: string;
         if (isNaN(postDate.getTime())) {

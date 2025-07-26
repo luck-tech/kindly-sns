@@ -1,5 +1,4 @@
-import { PostList, PostType,ViewMode } from "@/components/post"; // PostListと型をインポート
-import { toast } from "react-toastify";
+import { PostList, PostType,ViewMode } from "@/components/post";
 
 async function PostFetch(): Promise<PostType[]> {
   try {
@@ -10,7 +9,6 @@ async function PostFetch(): Promise<PostType[]> {
     });
 
     if (!res.ok) {
-      toast.error("投稿の取得に失敗しました。");
       console.error("投稿の取得に失敗しました。");
       return [];
     }
