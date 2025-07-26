@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser } from "@/lib/auth";
 import { query } from "@/lib/db";
+import { use } from "react";
 
 export async function POST(
   request: NextRequest,
-  context: { params: { id: string } } // paramsでpostIdを取得
+  { params }: { params: Promise<{ id: string }> } // paramsでpostIdを取得
 ) {
   try {
     const user = getAuthUser(request); // ログイン中のユーザーを取得
@@ -13,10 +14,10 @@ export async function POST(
       return NextResponse.json({ message: "認証エラー" }, { status: 401 });
     }
 
-    const { params } = context;
+    const { id } = use(params);
     const sql = "INSERT INTO likes (user_id, post_id) VALUES ($1, $2)";
     const userId = user.userId;
-    const postId = parseInt(params.id, 10);
+    const postId = parseInt(id, 10);
 
     await query(sql, [userId, postId]);
 
@@ -35,7 +36,7 @@ export async function POST(
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: { id: string } } // paramsでpostIdを取得
+  { params }: { params: Promise<{ id: string }> } // paramsでpostIdを取得
 ) {
   try {
     const user = getAuthUser(request); // ログイン中のユーザーを取得
@@ -47,10 +48,10 @@ export async function DELETE(
       );
     }
 
-    const { params } = context;
+    const { id } = use(params);
     const sql = "DELETE FROM likes WHERE user_id = $1 AND post_id = $2";
     const userId = user.userId;
-    const postId = parseInt(params.id, 10);
+    const postId = parseInt(id, 10);
 
     await query(sql, [userId, postId]);
 
