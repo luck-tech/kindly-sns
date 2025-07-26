@@ -1,32 +1,53 @@
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
+import { jwtVerify } from "jose";
 
-const PUBLIC_PATHS = ["/login", "/signup", "/api"];
+// ログイン状態でアクセスさせないパス
+const AUTH_PATHS = ["/login", "/signup"];
 
-export function middleware(request: NextRequest) {
-  //   const { pathname } = request.nextUrl;
-  //   // パブリックパスはスキップ
-  //   if (PUBLIC_PATHS.some((path) => pathname.startsWith(path))) {
-  //     return NextResponse.next();
-  //   }
-  //   // クッキーからトークン取得
-  //   const token = request.cookies.get("auth-token")?.value;
-  //   // トークンがなければログインへ
-  //   if (!token) {
-  //     const loginUrl = new URL("/login", request.url);
-  //     return NextResponse.redirect(loginUrl);
-  //   }
-  //   // トークン検証（無効ならログインへ）
-  //   try {
-  //     jwt.verify(token, process.env.JWT_SECRET || "fallback-secret");
-  //     return NextResponse.next();
-  //   } catch {
-  //     const loginUrl = new URL("/login", request.url);
-  //     return NextResponse.redirect(loginUrl);
-  //   }
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const token = request.cookies.get("auth-token")?.value;
+
+  // --- ログイン済みユーザー向けの処理 ---
+  const isAuthPath = AUTH_PATHS.some((path) => pathname.startsWith(path));
+
+  if (isAuthPath) {
+    if (token) {
+      try {
+        // トークンが有効かチェック
+        const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
+        await jwtVerify(token, secret);
+        // 有効ならホームページにリダイレクト
+        return NextResponse.redirect(new URL("/", request.url));
+      } catch (error) {
+        // トークンが無効なら何もしない（ログインページへ進ませる）
+      }
+    }
+    // トークンがない場合も何もしない（ログインページへ進ませる）
+    return NextResponse.next();
+  }
+
+  // --- 未ログインユーザー向けの処理 ---
+  // 保護されたルートにトークンなしでアクセスした場合、ログインページへ
+  if (!token) {
+    const loginUrl = new URL("/login", request.url);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  // トークンを検証
+  try {
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
+    await jwtVerify(token, secret);
+    // 検証成功
+    return NextResponse.next();
+  } catch (err) {
+    // 検証失敗
+    const loginUrl = new URL("/login", request.url);
+    return NextResponse.redirect(loginUrl);
+  }
 }
 
-// 適用範囲を指定（appディレクトリ配下全体）
+// middlewareを適用する範囲
 export const config = {
-  matcher: ["/((?!api|_next|favicon.ico|login|signup|public).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
