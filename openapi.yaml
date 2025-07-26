@@ -102,7 +102,33 @@ paths:
           description: 認証失敗
         "500":
           description: サーバーエラー
-
+  /api/auth/logout:
+    post:
+      tags: [Auth]
+      summary: ログアウト
+      description: |
+        現在のセッション（auth-tokenクッキー）を削除し、ログアウトします。
+      responses:
+        "200":
+          description: ログアウト成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  success:
+                    type: boolean
+        "500":
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
   /api/posts:
     get:
       tags: [Posts]
