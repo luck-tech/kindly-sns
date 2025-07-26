@@ -43,11 +43,6 @@ export default function AuthForm({ type }: AuthFormProps) {
 
       const data = await res.json();
       if (res.ok) {
-        toast.success(
-          type === "signup" ? "アカウントを登録しました！" : (
-            "ログインしました！"
-          )
-        );
         if (type === "signup") {
           router.push("/login");
         } else {
@@ -76,9 +71,9 @@ export default function AuthForm({ type }: AuthFormProps) {
         }}
         autoComplete="email"
         className={`w-[448px] bg-[#F5F2F2] p-[16px] rounded-[12px] mx-[12px] my-[16px] placeholder:text-[#827066] ${
-          errors.email ?
-            "ring-2 ring-red-500"
-          : "focus:ring-2 focus:ring-indigo-400"
+          errors.email
+            ? "ring-2 ring-red-500"
+            : "focus:ring-2 focus:ring-indigo-400"
         }`}
       />
       {errors.email && (
@@ -99,9 +94,9 @@ export default function AuthForm({ type }: AuthFormProps) {
         }}
         autoComplete={type === "signup" ? "new-password" : "current-password"}
         className={`w-[448px] bg-[#F5F2F2] p-[16px] rounded-[12px] mx-[12px] my-[16px] placeholder:text-[#827066] ${
-          errors.password ?
-            "ring-2 ring-red-500"
-          : "focus:ring-2 focus:ring-indigo-400"
+          errors.password
+            ? "ring-2 ring-red-500"
+            : "focus:ring-2 focus:ring-indigo-400"
         }`}
       />
       {errors.password && (
