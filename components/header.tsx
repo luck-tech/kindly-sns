@@ -16,7 +16,7 @@ const Header = () => {
   // ログアウト処理を行う関数
   const handleLogout = async () => {
     try {
-      const response = await fetch("/auth/logout", {
+      const response = await fetch("api/auth/logout", {
         method: "POST",
       });
 
