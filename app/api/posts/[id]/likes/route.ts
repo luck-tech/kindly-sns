@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser } from "@/lib/auth";
 import { query } from "@/lib/db";
-import { use } from "react";
 
 export async function POST(
   request: NextRequest,
@@ -14,7 +13,7 @@ export async function POST(
       return NextResponse.json({ message: "認証エラー" }, { status: 401 });
     }
 
-    const { id } = use(params);
+    const { id } = await params;
     const sql = "INSERT INTO likes (user_id, post_id) VALUES ($1, $2)";
     const userId = user.userId;
     const postId = parseInt(id, 10);
@@ -48,7 +47,7 @@ export async function DELETE(
       );
     }
 
-    const { id } = use(params);
+    const { id } = await params;
     const sql = "DELETE FROM likes WHERE user_id = $1 AND post_id = $2";
     const userId = user.userId;
     const postId = parseInt(id, 10);
