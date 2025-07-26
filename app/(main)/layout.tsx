@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Hachi_Maru_Pop } from "next/font/google";
 import "../globals.css";
 import Header from "@/components/header";
-import ToastProvider from "@/components/ToastProvider";
+import { ToastContainer } from "react-toastify";
 
 const hachiMaruPop = Hachi_Maru_Pop({
   weight: "400",
@@ -24,7 +24,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${hachiMaruPop.className} antialiased`}>
         <Header />
-        <ToastProvider><main className="pt-16">{children}</main></ToastProvider>
+        <main className="pt-16">{children}</main>
+        <ToastContainer />
       </body>
     </html>
   );

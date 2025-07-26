@@ -22,51 +22,7 @@ export type PostType = {
 //表示モード
 export type ViewMode = "self" | "like" | "latest";
 
-const initialDate= "2025-07-20";
-const secondDate= "2025-07-22";
 
-// 自分の投稿のモックデータ
-const mockSelfPosts: PostType[] = [
-  {
-    id: 1,
-    user: {
-      username: "田中 太郎",
-      user_id: "tanaka_taro",
-      icon_url: "https://github.com/shadcn.png",
-    },
-    content: "今日のランチはラーメンでした！とても美味しかったです。 #ラーメン",
-    like_count: 15,
-    created_at: initialDate,
-  },
-  {
-    id: 2,
-    user: {
-      username: "田中 太郎",
-      user_id: "tanaka_taro",
-      icon_url: "https://github.com/shadcn.png",
-    },
-    content:
-      "今日いただいたわりに心から感謝しています。これは、たとえ小さな情のある行為でも大きな違いを生むことができることを思い出させます。もっと優しさを広げましょう！",
-    like_count: 32,
-    created_at: secondDate,
-  },
-];
-
-// いいねした投稿のモックデータ
-const mockLikedPosts: PostType[] = [
-  {
-    id: 3,
-    user: {
-      username: "鈴木 一郎",
-      user_id: "suzuki_ichiro",
-      icon_url: "https://github.com/vercel.png",
-    },
-    content:
-      "今日いただいたわりに心から感謝しています。これは、たとえ小さな情のある行為でも大きな違いを生むことができることを思い出させます。もっと優しさを広げましょう！",
-    like_count: 128,
-    created_at: initialDate,
-  },
-];
 
 export const PostList = ({
   mode,
@@ -75,12 +31,14 @@ export const PostList = ({
   mode: ViewMode;
   allPosts?: PostType[];
 }) => {
+
+
   // モードに応じて表示する投稿を決定
   let posts: PostType[];
   if (mode === "self") {
-    posts = mockSelfPosts;
+    posts = allPosts;
   } else if (mode === "like") {
-    posts = mockLikedPosts;
+    posts = allPosts;
   } else {
     // "latest": 全投稿をまとめる
     posts = allPosts;
