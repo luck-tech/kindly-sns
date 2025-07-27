@@ -9,6 +9,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 interface ProfileEditModalProps {
   children: React.ReactNode;
@@ -21,11 +23,67 @@ export default function ProfileEditModal({ children }: ProfileEditModalProps) {
   const [open, setOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
+  useEffect(() => {
+    if (open) {
+      const fetchCurrentUser = async () => {
+        try {
+          const res = await fetch("/api/me");
+          if (!res.ok) throw new Error("ユーザー情報の取得に失敗しました");
+          const data = await res.json();
+          setName(data.username);
+          setImagePreview(data.icon_url);
+        } catch (err: any) {
+          toast.error(err.message);
+        }
+      };
+      fetchCurrentUser();
+    }
+  }, [open]);
+
+  // 登録ボタンの処理
   const handleRegister = async () => {
     setIsSaving(true);
-    console.log(selectedFile);
-    /** TODO: ここでAPIリクエストの実装 */
+    let iconUrl: string | undefined = undefined;
+
+    try {
+      // 新しい画像が選択されていれば、アップロードしてURLを取得
+      if (selectedFile) {
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+        const uploadRes = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+        if (!uploadRes.ok) throw new Error("画像のアップロードに失敗しました");
+        const uploadData = await uploadRes.json();
+        iconUrl = uploadData.url;
+      }
+
+      // プロフィール情報を更新
+      const profileRes = await fetch("/api/me", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: name,
+          icon_url: iconUrl, // 新しいURLがあればそれを使う
+        }),
+      });
+
+      if (!profileRes.ok) {
+        const errorData = await profileRes.json();
+        throw new Error(errorData.error || "プロフィールの更新に失敗しました");
+      }
+
+      // 成功したらページをリフレッシュしてモーダルを閉じる
+      router.refresh();
+      setOpen(false);
+    } catch (err: any) {
+      toast.error(err.message);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleImageClick = () => {
@@ -36,17 +94,14 @@ export default function ProfileEditModal({ children }: ProfileEditModalProps) {
     const file = event.target.files?.[0];
     if (file) {
       setSelectedFile(file);
-      setImagePreview(URL.createObjectURL(file));
-    }
-  };
-
-  useEffect(() => {
-    return () => {
+      // 古いプレビュー用のURLを解放
       if (imagePreview) {
         URL.revokeObjectURL(imagePreview);
       }
-    };
-  }, [imagePreview]);
+      console.log(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
 
   const renderProfileImage = () => {
     if (imagePreview) {
