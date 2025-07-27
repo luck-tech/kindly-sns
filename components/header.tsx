@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -10,31 +10,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { UserProfile } from "@/types/user";
+import { useUserStore } from "@/stores/user-stores";
 
 const Header = () => {
   const router = useRouter();
-  const [user, setUser] = useState<UserProfile | null>(null);
+  const { user, fetchUser } = useUserStore();
 
-  // ユーザー情報取得
+  // ユーザーデータを取得
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch("/api/me");
-        if (res.ok) {
-          const data = await res.json();
-          setUser({
-            user_id: data.user_id,
-            icon_url: data.icon_url,
-            username: data.username,
-          });
-        }
-      } catch (e) {
-        // エラー時は何もしない
-      }
-    };
     fetchUser();
-  }, []);
+  }, [fetchUser]);
 
   // ログアウト処理を行う関数
   const handleLogout = async () => {
