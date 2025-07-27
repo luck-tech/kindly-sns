@@ -1,9 +1,9 @@
 import ProfileOthersGeneral from "@/components/profile-fetch-others";
 
 
-export default async function Profile({ params }: { params: { id: string } }) {
-  const id = params.id;
-
+export default async function Profile(props: { params: Promise<{ id: string }> }
+) {
+  const { id } = await props.params;
   const numericId = Number(id);
 
   return (
