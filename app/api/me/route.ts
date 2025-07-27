@@ -3,7 +3,7 @@ import { getAuthUser } from "@/lib/auth";
 import { query } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const user = await getAuthUser();
   if (!user) {
     return NextResponse.json({ error: "認証エラー" }, { status: 401 });

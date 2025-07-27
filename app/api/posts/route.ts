@@ -37,7 +37,7 @@ IMPORTANT:
 Transform this text:
 `;
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // ログインユーザー取得（未ログインならnull）
     const user = await getAuthUser();

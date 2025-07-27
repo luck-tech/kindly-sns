@@ -4,7 +4,7 @@ export async function POST() {
   try {
     const response = NextResponse.json(
       { message: "ログアウトに成功しました", success: true },
-      { status: 200 },
+      { status: 200 }
     );
 
     // 'auth-token'クッキーを削除
@@ -14,7 +14,7 @@ export async function POST() {
   } catch (error) {
     return NextResponse.json(
       { error: "サーバーエラーが発生しました" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
