@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   }
 
   const result = await query(
-    `SELECT username, user_id, icon_url FROM users WHERE id = $1`,
+    `SELECT id, username, user_id, icon_url FROM users WHERE id = $1`,
     [user.userId]
   );
   const profile = result.rows[0];
@@ -23,6 +23,7 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json(
     {
+      id:profile.id,
       username: profile.username,
       user_id: profile.user_id,
       icon_url: profile.icon_url,
@@ -74,10 +75,10 @@ export async function PUT(request: NextRequest) {
   }
 
   await query(
-    `UPDATE users SET 
-      username = COALESCE($1, username), 
-      icon_url = COALESCE($2, icon_url), 
-      user_id = COALESCE($3, user_id) 
+    `UPDATE users SET
+      username = COALESCE($1, username),
+      icon_url = COALESCE($2, icon_url),
+      user_id = COALESCE($3, user_id)
       WHERE id = $4`,
     [username, icon_url, user_id, user.userId]
   );

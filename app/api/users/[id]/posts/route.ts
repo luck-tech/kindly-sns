@@ -3,13 +3,13 @@ import { query } from "@/lib/db";
 
 export async function GET(
   request: NextRequest,
-  props: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
-  const { id: userId } = await props.params;
+  const userId = params.id;
 
   const result = await query(
-    `
-    SELECT 
+   `
+    SELECT
       p.id,
       p.content,
       p.created_at,
@@ -20,7 +20,7 @@ export async function GET(
     FROM posts p
     JOIN users u ON p.user_id = u.id
     LEFT JOIN likes l ON p.id = l.post_id
-    WHERE u.user_id = $1
+    WHERE u.id = $1
     GROUP BY p.id, u.id, u.username, u.user_id, u.icon_url
     ORDER BY p.created_at DESC
     LIMIT 50

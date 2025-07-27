@@ -1,21 +1,19 @@
+"use client";
+
+import { useRouter } from 'next/navigation';
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ThumbsUp } from "lucide-react";
-
 
 export type PostType = {
   id: number;
   content: string;
-  // 変更: date -> created_at
   created_at: string;
-  // 変更: author -> user
   user: {
-    // 変更: name -> username
+    id:number;
     username: string;
     user_id: string;
-    // 変更: avatarUrl -> icon_url
     icon_url: string;
   };
-  // 変更: likes -> like_count
   like_count: number;
 };
 
@@ -26,28 +24,21 @@ export type ViewMode = "self" | "like" | "latest";
 
 export const PostList = ({
   mode,
-  allPosts = [],
+  allPosts,
 }: {
   mode: ViewMode;
   allPosts?: PostType[];
 }) => {
 
-
-  // モードに応じて表示する投稿を決定
-  let posts: PostType[];
-  if (mode === "self") {
-    posts = allPosts;
-  } else if (mode === "like") {
-    posts = allPosts;
-  } else {
-    // "latest": 全投稿をまとめる
-    posts = allPosts;
-  }
-
+  const router = useRouter();
+  const goToProfile = (userId: number) => {
+    router.push(`/profile/${userId}`);
+  };
 
   return (
     <div>
-      {posts.map((post) => {
+      {allPosts?.map((post) => {
+        const id = post.user.id
         const postDate = new Date(post.created_at);
         let dateDisplayText: string;
         if (isNaN(postDate.getTime())) {
@@ -72,7 +63,7 @@ export const PostList = ({
 
         return (
           <div key={post.id} className="flex px-[16px] py-[12px]">
-            <Avatar className="cursor-pointer">
+            <Avatar className="cursor-pointer" onClick={() => goToProfile(post.user.id)}>
               <AvatarImage src={post.user.icon_url} />
               <AvatarFallback>{post.user.username.slice(0, 2)}</AvatarFallback>
             </Avatar>

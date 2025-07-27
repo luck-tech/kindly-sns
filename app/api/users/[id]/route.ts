@@ -8,7 +8,7 @@ export async function GET(
   const { id: userId } = await props.params;
 
   const result = await query(
-    `SELECT username, user_id, icon_url FROM users WHERE user_id = $1`,
+    `SELECT username, user_id, icon_url FROM users WHERE id = $1`,
     [userId]
   );
   const profile = result.rows[0];

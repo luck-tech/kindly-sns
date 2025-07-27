@@ -15,7 +15,7 @@ You are a content transformer for a "Kind SNS" platform. Transform user posts in
 
 RULES:
 1. Replace harsh/aggressive words with gentle alternatives
-2. Convert negative emotions into constructive, positive expressions  
+2. Convert negative emotions into constructive, positive expressions
 3. Use casual, friendly tone (no formal language)
 4. Add appropriate emojis and softening characters like "〜" and "♪"
 5. Maintain original intent while making readers feel warm
@@ -25,7 +25,7 @@ EXAMPLES:
 Input: "マジでムカつく！上司が最悪すぎる"
 Output: "今日はちょっとモヤモヤしちゃった〜。上司とのコミュニケーションがうまくいかなくて困ってるの💦"
 
-Input: "死ね"  
+Input: "死ね"
 Output: "今日は疲れちゃった〜。少し休憩が必要かも🌸"
 
 IMPORTANT:
@@ -41,10 +41,11 @@ export async function GET(request: NextRequest) {
   try {
     // ホーム画面用の投稿一覧取得クエリ
     const result = await query(`
-      SELECT 
+      SELECT
         p.id,
         p.content,
         p.created_at,
+        u.id AS login_id,
         u.username,
         u.user_id,
         u.icon_url,
@@ -63,6 +64,7 @@ export async function GET(request: NextRequest) {
       content: row.content,
       created_at: row.created_at,
       user: {
+        id:row.login_id,
         username: row.username,
         user_id: row.user_id,
         icon_url: row.icon_url,
@@ -158,8 +160,8 @@ export async function POST(request: NextRequest) {
 
     // データベースに投稿を保存
     const result = await query(
-      `INSERT INTO posts (user_id, content) 
-       VALUES ($1, $2) 
+      `INSERT INTO posts (user_id, content)
+       VALUES ($1, $2)
        RETURNING id, content, created_at`,
       [user.userId, transformedContent]
     );

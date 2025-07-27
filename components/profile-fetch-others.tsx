@@ -1,16 +1,15 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import AllPosts from "@/components/post-fetch";
 import OthersPosts from "@/components/post-fetch-others";
 import LikedPosts from "@/components/post-fetch-like";
 import ProfileEditModal from "@/components/profile-edit-modal";
 import { ProfileMain, ProfileType } from "@/components/profile-main";
 import { cookies } from "next/headers";
 
-async function fetchMyProfile(): Promise<ProfileType | null> {
+async function fetchOthersProfile(id:number): Promise<ProfileType | null> {
   try {
     const cookieStore = await cookies();
     const cookieHeader = cookieStore.toString();
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/me`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/users/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -34,34 +33,21 @@ async function fetchMyProfile(): Promise<ProfileType | null> {
 }
 
 
-export default async function ProfileGeneral() {
-  const myProfile = await fetchMyProfile();
+export default async function ProfileOthersGeneral({ id }: { id: number }) {
+  const othersProfile = await fetchOthersProfile(id)
   return (
     <div className="p-0 m-0">
-      <ProfileMain profile={myProfile} mode="self" />
-      {myProfile && (
-        <div className="flex justify-center mt-4">
-            <ProfileEditModal profile={myProfile}>
-              <button
-                type="button"
-                className="w-[240px] h-[40px] bg-[#f5f2f2] font-normal text-[14px] leading-[21px] tracking-normal text-center rounded-[20px] hover:bg-gray-200 cursor-pointer"
-              >
-                プロフィールを編集
-              </button>
-            </ProfileEditModal>
-        </div>
-      )}
-
+      <ProfileMain profile={othersProfile} mode="self" />
       <Tabs defaultValue="self" className="w-[960px] mx-auto mt-[16px]">
         <TabsList>
           <TabsTrigger value="self">投稿</TabsTrigger>
           <TabsTrigger value="like">いいね</TabsTrigger>
         </TabsList>
         <TabsContent value="self">
-          <OthersPosts mode="self" id={myProfile?.id}/>
+          <OthersPosts mode="self" id={id}/>
         </TabsContent>
         <TabsContent value="like">
-          <LikedPosts mode="like" id={myProfile?.id} />
+          <LikedPosts mode="like" id={id} />
         </TabsContent>
       </Tabs>
     </div>

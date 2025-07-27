@@ -3,6 +3,7 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 export type ProfileType = {
+  id:number;
   email: string;
   username:string;
   user_id: string;

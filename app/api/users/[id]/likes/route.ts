@@ -3,13 +3,13 @@ import { query } from "@/lib/db";
 
 export async function GET(
   request: NextRequest,
-  props: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
-  const { id: userId } = await props.params;
+  const userId = Number(params.id);
 
   const result = await query(
     `
-    SELECT 
+    SELECT
       p.id,
       p.content,
       p.created_at,
