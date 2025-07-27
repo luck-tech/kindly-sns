@@ -1,23 +1,8 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import LikeButton from "@/components/like-button";
 import { headers } from "next/headers";
-
-type PostType = {
-  id: number;
-  content: string;
-  created_at: string;
-  user: {
-    username: string;
-    user_id: string;
-    icon_url: string;
-  };
-  like_count: number;
-  liked: boolean;
-};
-
-type PostListProps = {
-  endpoint?: string;
-};
+import { Post } from "@/types/posts";
+import { PostListProps } from "@/types/post-list";
 
 export default async function PostList({
   endpoint = "/api/posts",
@@ -31,7 +16,7 @@ export default async function PostList({
     }
   );
   const data = await res.json();
-  const posts: PostType[] = Array.isArray(data.posts) ? data.posts : data;
+  const posts: Post[] = Array.isArray(data.posts) ? data.posts : data;
 
   return (
     <>

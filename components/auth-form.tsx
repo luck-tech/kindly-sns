@@ -5,10 +5,7 @@ import { authSchema } from "@/schema/auth";
 import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-
-export type AuthFormProps = {
-  type: "login" | "signup";
-};
+import { AuthFormProps } from "@/types/auth";
 
 export default function AuthForm({ type }: AuthFormProps) {
   const [email, setEmail] = useState("");

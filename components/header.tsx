@@ -10,12 +10,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
-type UserProfile = {
-  user_id: string;
-  icon_url: string;
-  username: string;
-};
+import { UserProfile } from "@/types/user";
 
 const Header = () => {
   const router = useRouter();

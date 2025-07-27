@@ -3,12 +3,7 @@
 import { useState } from "react";
 import { ThumbsUp } from "lucide-react";
 import { useRouter } from "next/navigation";
-
-type LikeButtonProps = {
-  postId: number;
-  liked: boolean;
-  likeCount: number;
-};
+import { LikeButtonProps } from "@/types/post-list";
 
 export default function LikeButton({
   postId,
