@@ -48,15 +48,21 @@ export const PostList = ({
             today.getMonth(),
             today.getDate()
           );
-          const startOfTarget = new Date(
-            postDate.getFullYear(),
-            postDate.getMonth(),
-            postDate.getDate()
-          );
-          const diffInMs = startOfToday.getTime() - startOfTarget.getTime();
+          const now = new Date();
+          const diffInMs = now.getTime() - postDate.getTime();
+          const minutesAgo = Math.floor(diffInMs / (1000 * 60));
+          const hoursAgo = Math.floor(diffInMs / (1000 * 60 * 60));
           const daysAgo = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 
-          dateDisplayText = `${daysAgo}日前`;
+          if (minutesAgo < 1) {
+            dateDisplayText = "たった今";
+          } else if (minutesAgo < 60) {
+            dateDisplayText = `${minutesAgo}分前`;
+          } else if (hoursAgo < 24) {
+            dateDisplayText = `${hoursAgo}時間前`;
+          } else {
+            dateDisplayText = `${daysAgo}日前`;
+          }
         }
 
         return (
