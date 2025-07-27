@@ -37,7 +37,7 @@ export const PostForm = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ content: result.data.content }),
-        credentials: "include",
+        credentials: "include", // 認証情報を含める（ブラウザ用）
       });
 
       if (!res.ok) {

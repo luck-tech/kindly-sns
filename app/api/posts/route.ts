@@ -68,7 +68,7 @@ export async function GET(request: NextRequest) {
     if (user && postIds.length > 0) {
       const likesResult = await query(
         `SELECT post_id FROM likes WHERE user_id = $1 AND post_id = ANY($2::bigint[])`,
-        [user.userId, postIds]
+        [user.id, postIds]
       );
       likedMap = Object.fromEntries(
         likesResult.rows.map((r) => [Number(r.post_id), true])

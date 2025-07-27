@@ -1,5 +1,6 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import LikeButton from "@/components/like-button";
+import { headers } from "next/headers";
 
 type PostType = {
   id: number;
@@ -21,10 +22,12 @@ type PostListProps = {
 export default async function PostList({
   endpoint = "/api/posts",
 }: PostListProps) {
+  const requestHeaders = new Headers(await headers());
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL ?? ""}${endpoint}`,
     {
       cache: "no-store", // SSRで毎回最新を取得
+      headers: requestHeaders, // クッキーを含めるためにヘッダーを渡す
     }
   );
   const data = await res.json();
