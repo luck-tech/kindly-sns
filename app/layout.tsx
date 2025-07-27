@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     siteName,
     images: [
       {
-        url: "/ogp.png",
+        url: "/ogp-v2.png",
         width: 1200,
         height: 630,
         alt: "OGP画像",
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteName,
     description,
-    images: ["/ogp.png"],
+    images: ["/ogp-v2.png"],
   },
 };
 export default function RootLayout({
