@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ThumbsUp } from "lucide-react";
-import { postSchema } from "@/schema/post";
 
 type PostType = {
   id: number;
@@ -20,9 +19,6 @@ type PostType = {
 
 export default function PostList() {
   const [posts, setPosts] = useState<PostType[]>([]);
-  const [content, setContent] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errors, setErrors] = useState<{ content?: string }>({});
 
   // 投稿一覧取得
   useEffect(() => {
@@ -38,50 +34,8 @@ export default function PostList() {
     fetchPosts();
   }, []);
 
-  // 投稿送信
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (isSubmitting) return;
-    const result = postSchema.safeParse({ content });
-    if (!result.success) {
-      const contentError = result.error.issues.find(
-        (issue) => issue.path[0] === "content"
-      );
-      if (contentError) setErrors({ content: contentError.message });
-      return;
-    }
-    setErrors({});
-    setIsSubmitting(true);
-    try {
-      const res = await fetch("/api/posts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ content: result.data.content }),
-        credentials: "include",
-      });
-      if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.error || "投稿に失敗しました。");
-      }
-      toast.success("投稿が完了しました！");
-      setContent("");
-      // 投稿後に再取得
-      const updated = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/posts`
-      );
-      const updatedData = await updated.json();
-      setPosts(
-        Array.isArray(updatedData.posts) ? updatedData.posts : updatedData
-      );
-    } catch (err) {
-      toast.error((err as Error).message);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
-    <div>
+    <>
       {[...posts]
         .sort(
           (a, b) =>
@@ -134,6 +88,6 @@ export default function PostList() {
             </div>
           );
         })}
-    </div>
+    </>
   );
 }
