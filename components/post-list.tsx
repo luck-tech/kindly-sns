@@ -3,6 +3,7 @@ import LikeButton from "@/components/like-button";
 import { headers } from "next/headers";
 import { Post } from "@/types/posts";
 import { PostListProps } from "@/types/post-list";
+import Link from "next/link";
 
 export default async function PostList({
   endpoint = "/api/posts",
@@ -44,15 +45,19 @@ export default async function PostList({
         }
         return (
           <div key={post.id} className="flex px-[16px] py-[12px]">
-            <Avatar className="cursor-pointer">
-              <AvatarImage src={post.user.icon_url} />
-              <AvatarFallback>{post.user.username.charAt(0)}</AvatarFallback>
-            </Avatar>
+            <Link href={`/profile/${post.user.user_id}`}>
+              <Avatar className="cursor-pointer">
+                <AvatarImage src={post.user.icon_url} />
+                <AvatarFallback>{post.user.username.charAt(0)}</AvatarFallback>
+              </Avatar>
+            </Link>
             <div className="flex flex-col w-full ml-[16px]">
               <div className="flex items-center gap-[12px]">
-                <p className="text-[14px] text-[#171412]">
-                  {post.user.username}
-                </p>
+                <Link href={`/profile/${post.user.user_id}`}>
+                  <p className="text-[14px] text-[#171412]">
+                    {post.user.username}
+                  </p>
+                </Link>
                 <p className="text-sm text-gray-500">{dateDisplayText}</p>
               </div>
               <p className="text-gray-800">{post.content}</p>
