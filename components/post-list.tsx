@@ -1,5 +1,5 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { ThumbsUp } from "lucide-react";
+import LikeButton from "@/components/like-button";
 
 type PostType = {
   id: number;
@@ -11,6 +11,7 @@ type PostType = {
     icon_url: string;
   };
   like_count: number;
+  liked: boolean;
 };
 
 type PostListProps = {
@@ -75,10 +76,11 @@ export default async function PostList({
                 </div>
                 <p className="text-gray-800">{post.content}</p>
                 <div className="flex items-center mt-[8px] text-gray-500 gap-[8px]">
-                  <ThumbsUp className="w-[20px] h-[20px] text-[14px] text-[#827066] cursor-pointer" />
-                  <p className="text-[14px] text-[#827066]">
-                    {post.like_count}
-                  </p>
+                  <LikeButton
+                    postId={post.id}
+                    liked={post.liked}
+                    likeCount={post.like_count}
+                  />
                 </div>
               </div>
             </div>
