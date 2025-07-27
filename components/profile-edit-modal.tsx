@@ -23,7 +23,8 @@ export default function ProfileEditModal({ children }: ProfileEditModalProps) {
   const [open, setOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
+  const [isSubmitting, setIsSubmitting] = useState(false); // api/uploadの処理中を管理
+  const [isPending, startTransition] = useTransition(); // router.refresh()のためにuseTransitionを使用
 
   useEffect(() => {
     if (open) {
@@ -44,6 +45,7 @@ export default function ProfileEditModal({ children }: ProfileEditModalProps) {
 
   // 登録ボタンの処理
   const handleRegister = async () => {
+    setIsSubmitting(true);
     let iconUrl: string | undefined = undefined;
 
     try {
@@ -78,6 +80,7 @@ export default function ProfileEditModal({ children }: ProfileEditModalProps) {
       startTransition(() => {
         router.refresh();
         setOpen(false);
+        setIsSubmitting(false);
       });
     } catch (err: any) {
       toast.error(err.message);
@@ -154,10 +157,14 @@ export default function ProfileEditModal({ children }: ProfileEditModalProps) {
             <button
               type="button"
               onClick={handleRegister}
-              disabled={isPending}
+              disabled={isSubmitting || isPending}
               className="bg-[#EBC2AD] rounded-lg px-3 py-2 flex items-center justify-center w-20 h-10 cursor-pointer disabled:opacity-50"
             >
-              {isPending ? <Loader2 className="animate-spin" /> : "登録"}
+              {isSubmitting || isPending ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                "登録"
+              )}
             </button>
           </div>
         </div>
