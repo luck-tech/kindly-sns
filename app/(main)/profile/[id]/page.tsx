@@ -9,7 +9,7 @@ export default async function Profile(props: {
   const { id } = await props.params;
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL ?? ""}/api/users/${id}`,
+    `${process.env.NEXT_PUBLIC_BASE_URL ?? ""}/api/users/${id}`
   );
   const data = await res.json();
 
@@ -22,7 +22,7 @@ export default async function Profile(props: {
           className="h-full w-auto aspect-square cursor-pointer"
         />
         <AvatarFallback>
-          {data.username ? data.username.charAt(0) : "?"}
+          {data.username ? data.username.charAt(0) : ""}
         </AvatarFallback>
       </Avatar>
       <div className="mt-[16px] flex flex-col items-center">
