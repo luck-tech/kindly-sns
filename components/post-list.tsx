@@ -1,7 +1,3 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
-import { toast } from "react-toastify";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { ThumbsUp } from "lucide-react";
 
@@ -21,22 +17,17 @@ type PostListProps = {
   endpoint?: string;
 };
 
-export default function PostList({ endpoint = "/api/posts" }: PostListProps) {
-  const [posts, setPosts] = useState<PostType[]>([]);
-
-  // 投稿一覧取得
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const res = await fetch(endpoint);
-        const data = await res.json();
-        setPosts(Array.isArray(data.posts) ? data.posts : data);
-      } catch {
-        toast.error("投稿の取得に失敗しました。");
-      }
-    };
-    fetchPosts();
-  }, [endpoint]);
+export default async function PostList({
+  endpoint = "/api/posts",
+}: PostListProps) {
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL ?? ""}${endpoint}`,
+    {
+      cache: "no-store", // SSRで毎回最新を取得
+    }
+  );
+  const data = await res.json();
+  const posts: PostType[] = Array.isArray(data.posts) ? data.posts : data;
 
   return (
     <>
