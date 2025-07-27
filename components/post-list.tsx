@@ -17,14 +17,18 @@ type PostType = {
   like_count: number;
 };
 
-export default function PostList() {
+type PostListProps = {
+  endpoint?: string;
+};
+
+export default function PostList({ endpoint = "/api/posts" }: PostListProps) {
   const [posts, setPosts] = useState<PostType[]>([]);
 
   // 投稿一覧取得
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await fetch("/api/posts");
+        const res = await fetch(endpoint);
         const data = await res.json();
         setPosts(Array.isArray(data.posts) ? data.posts : data);
       } catch {
@@ -32,7 +36,7 @@ export default function PostList() {
       }
     };
     fetchPosts();
-  }, []);
+  }, [endpoint]);
 
   return (
     <>

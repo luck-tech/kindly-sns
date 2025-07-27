@@ -1,9 +1,13 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import ProfileEditModal from "@/components/profile-edit-modal";
-import PostSection from "@/components/post-list";
+import PostList from "@/components/post-list";
 
-export default function Profile() {
+export default async function Profile(props: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await props.params;
+
   return (
     <div className="flex flex-col items-center mt-[36px]">
       <Avatar className="flex justify-center w-[128px] h-[128px]">
@@ -32,10 +36,10 @@ export default function Profile() {
           <TabsTrigger value="like">いいね</TabsTrigger>
         </TabsList>
         <TabsContent value="self">
-          <PostSection />
+          <PostList endpoint={`/api/users/${id}/posts`} />
         </TabsContent>
         <TabsContent value="like">
-          <PostSection />
+          <PostList endpoint={`/api/users/${id}/likes`} />
         </TabsContent>
       </Tabs>
     </div>
