@@ -1,11 +1,12 @@
 "use client";
-import React, { useState,useTransition } from "react";
-import { useRouter } from 'next/navigation';
+
+import React, { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
-import { postSchema } from "@/schema/post"
+import { postSchema } from "@/schema/post";
 
-export const PostSubmit = () => {
+export const PostForm = () => {
   const [isPending, startTransition] = useTransition();
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -59,10 +60,10 @@ export const PostSubmit = () => {
     }
   };
 
-
   const charCount = content.length;
   const isOverLimit = charCount > 140;
-  const isInvalid = isSubmitting || content.trim() === "" || isOverLimit || isPending;
+  const isInvalid =
+    isSubmitting || content.trim() === "" || isOverLimit || isPending;
 
   return (
     <form
@@ -81,7 +82,9 @@ export const PostSubmit = () => {
             if (errors.content) setErrors({});
           }}
           className={`h-[127px] w-full resize-none focus:outline-none ${
-            errors.content || isOverLimit ? "ring-2 ring-red-500 rounded-[8px]" : ""
+            errors.content || isOverLimit
+              ? "ring-2 ring-red-500 rounded-[8px]"
+              : ""
           }`}
           aria-invalid={!!errors.content || isOverLimit}
           aria-describedby="content-error"
@@ -107,7 +110,9 @@ export const PostSubmit = () => {
             {errors.content}
           </p>
         )}
-        <p className={`text-sm font-medium ${isOverLimit ? 'text-red-500' : 'text-gray-500'}`}>
+        <p
+          className={`text-sm font-medium ${isOverLimit ? "text-red-500" : "text-gray-500"}`}
+        >
           {charCount} / 140
         </p>
       </div>
