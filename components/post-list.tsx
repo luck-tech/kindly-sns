@@ -66,9 +66,7 @@ export default async function PostList({
             <div key={post.id} className="flex px-[16px] py-[12px]">
               <Avatar className="cursor-pointer">
                 <AvatarImage src={post.user.icon_url} />
-                <AvatarFallback>
-                  {post.user.username.slice(0, 2)}
-                </AvatarFallback>
+                <AvatarFallback>{post.user.username.charAt(0)}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col w-full ml-[16px]">
                 <div className="flex items-center gap-[12px]">
