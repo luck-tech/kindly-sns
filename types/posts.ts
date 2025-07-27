@@ -8,6 +8,7 @@ export interface Post {
     icon_url?: string;
   };
   like_count: number;
+  liked: boolean;
 }
 
 export interface PostsResponse {
