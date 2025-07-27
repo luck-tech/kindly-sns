@@ -6,5 +6,6 @@ type UserProfile = {
 
 export type UserState = {
   user: UserProfile | null;
+  isLoading: boolean;
   fetchUser: () => Promise<void>;
 };

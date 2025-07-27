@@ -11,10 +11,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useUserStore } from "@/stores/user-stores";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Header = () => {
   const router = useRouter();
-  const { user, fetchUser } = useUserStore();
+  const { user, fetchUser, isLoading } = useUserStore();
 
   // ユーザーデータを取得
   useEffect(() => {
@@ -51,16 +52,20 @@ const Header = () => {
       </Link>
       <Popover>
         <PopoverTrigger>
-          <Avatar>
-            <AvatarImage
-              src={user?.icon_url || ""}
-              alt="プロフィール画像"
-              className="h-full w-auto aspect-square cursor-pointer"
-            />
-            <AvatarFallback>
-              {user?.username ? user.username.charAt(0) : ""}
-            </AvatarFallback>
-          </Avatar>
+          {isLoading ? (
+            <Skeleton className="h-8 w-8 rounded-full" />
+          ) : (
+            <Avatar>
+              <AvatarImage
+                src={user?.icon_url || ""}
+                alt="プロフィール画像"
+                className="h-full w-auto aspect-square cursor-pointer"
+              />
+              <AvatarFallback>
+                {user?.username ? user.username.charAt(0) : ""}
+              </AvatarFallback>
+            </Avatar>
+          )}
         </PopoverTrigger>
         <PopoverContent className="mr-4">
           <div className="flex flex-col space-y-2">
