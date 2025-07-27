@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useTransition } from "react";
 import { Camera, Loader2 } from "lucide-react";
 import {
   Dialog,
@@ -21,9 +21,9 @@ export default function ProfileEditModal({ children }: ProfileEditModalProps) {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [open, setOpen] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     if (open) {
@@ -44,7 +44,6 @@ export default function ProfileEditModal({ children }: ProfileEditModalProps) {
 
   // 登録ボタンの処理
   const handleRegister = async () => {
-    setIsSaving(true);
     let iconUrl: string | undefined = undefined;
 
     try {
@@ -76,13 +75,12 @@ export default function ProfileEditModal({ children }: ProfileEditModalProps) {
         throw new Error(errorData.error || "プロフィールの更新に失敗しました");
       }
 
-      // 成功したらページをリフレッシュしてモーダルを閉じる
-      router.refresh();
-      setOpen(false);
+      startTransition(() => {
+        router.refresh();
+        setOpen(false);
+      });
     } catch (err: any) {
       toast.error(err.message);
-    } finally {
-      setIsSaving(false);
     }
   };
 
@@ -156,10 +154,10 @@ export default function ProfileEditModal({ children }: ProfileEditModalProps) {
             <button
               type="button"
               onClick={handleRegister}
-              disabled={isSaving}
+              disabled={isPending}
               className="bg-[#EBC2AD] rounded-lg px-3 py-2 flex items-center justify-center w-20 h-10 cursor-pointer disabled:opacity-50"
             >
-              {isSaving ? <Loader2 className="animate-spin" /> : "登録"}
+              {isPending ? <Loader2 className="animate-spin" /> : "登録"}
             </button>
           </div>
         </div>
