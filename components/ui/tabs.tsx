@@ -27,7 +27,7 @@ function TabsList({
       data-slot="tabs-list"
       className={cn(
         "flex h-9 w-full items-center gap-[32px] border-b-[1px] border-b-[#e3dede] pl-[16px] pb-[16px] mb-[12px]",
-        className
+        className,
       )}
       {...props}
     />
@@ -43,7 +43,7 @@ function TabsTrigger({
       data-slot="tabs-trigger"
       className={cn(
         "pt-[16px] pb-[13px] text-[#827066] data-[state=active]:text-[#171412] data-[state=active]:border-b-[3px] data-[state=active]:border-[#e5e8eb] cursor-pointer",
-        className
+        className,
       )}
       {...props}
     />

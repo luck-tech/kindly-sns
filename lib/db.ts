@@ -14,7 +14,7 @@ export function getPool(): Pool {
 // クエリ関数
 export async function query(
   text: string,
-  params?: (string | number | number[] | boolean | null)[]
+  params?: (string | number | number[] | boolean | null)[],
 ) {
   const pool = getPool();
   return pool.query(text, params);

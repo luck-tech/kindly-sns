@@ -68,10 +68,10 @@ export async function GET(request: NextRequest) {
     if (user && postIds.length > 0) {
       const likesResult = await query(
         `SELECT post_id FROM likes WHERE user_id = $1 AND post_id = ANY($2::bigint[])`,
-        [user.id, postIds]
+        [user.id, postIds],
       );
       likedMap = Object.fromEntries(
-        likesResult.rows.map((r) => [Number(r.post_id), true])
+        likesResult.rows.map((r) => [Number(r.post_id), true]),
       );
     }
 
@@ -94,13 +94,13 @@ export async function GET(request: NextRequest) {
         posts,
         count: posts.length,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error("投稿取得エラー:", error);
     return NextResponse.json(
       { error: "投稿の取得に失敗しました" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -119,14 +119,14 @@ export async function POST(request: NextRequest) {
     if (!content || content.trim().length === 0) {
       return NextResponse.json(
         { error: "投稿内容を入力してください" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (content.length > 500) {
       return NextResponse.json(
         { error: "投稿は500文字以内で入力してください" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
         },
         {
           timeout: 60000, // 60秒
-        }
+        },
       );
 
       const apiResponse = completion.choices[0]?.message?.content?.trim();
@@ -180,7 +180,7 @@ export async function POST(request: NextRequest) {
       `INSERT INTO posts (user_id, content) 
        VALUES ($1, $2) 
        RETURNING id, content, created_at`,
-      [user.id, transformedContent]
+      [user.id, transformedContent],
     );
 
     const newPost = result.rows[0];
@@ -188,7 +188,7 @@ export async function POST(request: NextRequest) {
     // ユーザー情報を取得
     const userResult = await query(
       `SELECT username, user_id, icon_url FROM users WHERE id = $1`,
-      [user.id]
+      [user.id],
     );
 
     const userInfo = userResult.rows[0];
@@ -210,12 +210,12 @@ export async function POST(request: NextRequest) {
         message: "投稿が作成されました",
         post: postResponse,
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     return NextResponse.json(
       { error: "サーバーエラーが発生しました" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -11,14 +11,14 @@ export async function POST(request: NextRequest) {
     if (!email || !password) {
       return NextResponse.json(
         { error: "メールアドレスとパスワードは必須です" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     if (password.length < 6) {
       return NextResponse.json(
         { error: "パスワードは6文字以上で入力してください" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     if (existingUser.rows.length > 0) {
       return NextResponse.json(
         { error: "このメールアドレスは既に使用されています" },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
       `INSERT INTO users (email, password_hash, username, user_id) 
        VALUES ($1, $2, $3, $4) 
        RETURNING id, email, username, user_id`,
-      [email, passwordHash, username || "ユーザー", userId]
+      [email, passwordHash, username || "ユーザー", userId],
     );
 
     const newUser = result.rows[0];
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
         userId: newUser.user_id,
       },
       process.env.JWT_SECRET || "fallback-secret",
-      { expiresIn: "7d" }
+      { expiresIn: "7d" },
     );
 
     // レスポンス作成
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
           userId: newUser.user_id,
         },
       },
-      { status: 201 }
+      { status: 201 },
     );
 
     // HTTPOnlyクッキーにトークンを設定
@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
     console.error("ユーザー登録エラー:", error);
     return NextResponse.json(
       { error: "サーバーエラーが発生しました" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

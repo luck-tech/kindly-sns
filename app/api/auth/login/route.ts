@@ -11,20 +11,20 @@ export async function POST(request: NextRequest) {
     if (!email || !password) {
       return NextResponse.json(
         { error: "メールアドレスとパスワードは必須です" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     // ユーザーを検索
     const result = await query(
       "SELECT id, email, password_hash, username, user_id FROM users WHERE email = $1",
-      [email]
+      [email],
     );
 
     if (result.rows.length === 0) {
       return NextResponse.json(
         { error: "メールアドレスまたはパスワードが正しくありません" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -33,12 +33,12 @@ export async function POST(request: NextRequest) {
     // パスワード検証
     const isValidPassword = await bcryptjs.compare(
       password,
-      user.password_hash
+      user.password_hash,
     );
     if (!isValidPassword) {
       return NextResponse.json(
         { error: "メールアドレスまたはパスワードが正しくありません" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
         userId: user.user_id,
       },
       process.env.JWT_SECRET || "fallback-secret",
-      { expiresIn: "7d" }
+      { expiresIn: "7d" },
     );
 
     // レスポンス作成
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
           userId: user.user_id,
         },
       },
-      { status: 200 }
+      { status: 200 },
     );
 
     // HTTPOnlyクッキーにトークンを設定
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
     console.error("ログインエラー:", error);
     return NextResponse.json(
       { error: "サーバーエラーが発生しました" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -11,7 +11,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     if (!file) {
       return NextResponse.json(
         { error: "ファイルが送信されていません" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -26,7 +26,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     console.error("Upload Error:", error);
     return NextResponse.json(
       { error: "アップロード中にエラーが発生しました" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

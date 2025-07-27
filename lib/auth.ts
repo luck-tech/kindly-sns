@@ -1,7 +1,6 @@
 import { JWTPayloadSchema, JWTPayload } from "@/schema/auth";
 import jwt from "jsonwebtoken";
 import { NextRequest } from "next/server";
-import { z } from "zod";
 
 export function getAuthUser(request: NextRequest): JWTPayload | null {
   const token = request.cookies.get("auth-token")?.value;
@@ -10,7 +9,7 @@ export function getAuthUser(request: NextRequest): JWTPayload | null {
   try {
     const rawPayload = jwt.verify(
       token,
-      process.env.JWT_SECRET ?? "fallback-secret"
+      process.env.JWT_SECRET ?? "fallback-secret",
     );
     if (typeof rawPayload === "object" && rawPayload !== null) {
       const parsed = JWTPayloadSchema.safeParse(rawPayload);

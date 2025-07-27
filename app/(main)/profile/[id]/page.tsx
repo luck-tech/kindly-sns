@@ -9,7 +9,7 @@ export default async function Profile(props: {
   const { id } = await props.params;
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL ?? ""}/api/users/${id}`
+    `${process.env.NEXT_PUBLIC_BASE_URL ?? ""}/api/users/${id}`,
   );
   const data = await res.json();
 

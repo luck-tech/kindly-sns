@@ -13,7 +13,7 @@ export default async function PostList({
     {
       cache: "no-store", // SSRで毎回最新を取得
       headers: requestHeaders, // クッキーを含めるためにヘッダーを渡す
-    }
+    },
   );
   const data = await res.json();
   const posts: Post[] = Array.isArray(data.posts) ? data.posts : data;
@@ -23,7 +23,7 @@ export default async function PostList({
       {[...posts]
         .sort(
           (a, b) =>
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
         )
         .map((post) => {
           const postDate = new Date(post.created_at);

@@ -9,7 +9,7 @@ async function migrate() {
   try {
     const schemaSQL = fs.readFileSync(
       path.join(process.cwd(), "database/schema.sql"),
-      "utf8"
+      "utf8",
     );
 
     await query(schemaSQL);
@@ -18,7 +18,7 @@ async function migrate() {
     // 初期データがある場合
     const seedSQL = fs.readFileSync(
       path.join(process.cwd(), "database/seed.sql"),
-      "utf8"
+      "utf8",
     );
 
     await query(seedSQL);

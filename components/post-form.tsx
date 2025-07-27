@@ -21,7 +21,7 @@ export const PostForm = () => {
 
     if (!result.success) {
       const contentError = result.error.issues.find(
-        (issue) => issue.path[0] === "content"
+        (issue) => issue.path[0] === "content",
       );
       if (contentError) {
         setErrors({ content: contentError.message });
