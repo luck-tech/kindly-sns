@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "../globals.css";
 import { Hachi_Maru_Pop } from "next/font/google";
 import { ToastContainer } from "react-toastify";
+import NextTopLoader from "nextjs-toploader";
 
 const hachiMaruPop = Hachi_Maru_Pop({
   weight: "400",
