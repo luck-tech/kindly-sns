@@ -12,6 +12,7 @@ import {
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { useUserStore } from "@/stores/user-stores";
+import Image from "next/image";
 
 interface ProfileEditModalProps {
   children: React.ReactNode;
@@ -80,8 +81,12 @@ export default function ProfileEditModal({ children }: ProfileEditModalProps) {
         setOpen(false);
         setIsSubmitting(false);
       });
-    } catch (err: any) {
-      toast.error(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error("不明なエラーが発生しました");
+      }
     }
   };
 
@@ -105,10 +110,12 @@ export default function ProfileEditModal({ children }: ProfileEditModalProps) {
   const renderProfileImage = () => {
     if (imagePreview) {
       return (
-        <img
+        <Image
           src={imagePreview}
           alt="Profile Preview"
           className="w-full h-full rounded-full object-cover"
+          width={96}
+          height={96}
         />
       );
     }
