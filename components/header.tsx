@@ -32,7 +32,7 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed w-full h-16 px-6 py-2 bg-white flex justify-between border-b border-gray-200">
+    <header className="fixed w-full h-16 px-6 py-2 bg-white flex justify-between border-b border-gray-200 z-50">
       <Link href="/">
         <Image
           src="/logo.png"
