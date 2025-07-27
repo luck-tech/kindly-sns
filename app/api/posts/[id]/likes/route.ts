@@ -15,7 +15,7 @@ export async function POST(
 
     const { id } = await params;
     const sql = "INSERT INTO likes (user_id, post_id) VALUES ($1, $2)";
-    const userId = user.userId;
+    const userId = user.id;
     const postId = parseInt(id, 10);
 
     await query(sql, [userId, postId]);
