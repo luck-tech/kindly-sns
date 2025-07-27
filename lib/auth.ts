@@ -21,7 +21,6 @@ export function getAuthUser(request: NextRequest): JWTPayload | null {
       token,
       process.env.JWT_SECRET ?? "fallback-secret"
     );
-    console.log(rawPayload);
     if (typeof rawPayload === "object" && rawPayload !== null) {
       const parsed = JWTPayloadSchema.safeParse(rawPayload);
       if (parsed.success) {
