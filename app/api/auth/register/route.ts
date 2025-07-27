@@ -54,10 +54,10 @@ export async function POST(request: NextRequest) {
     // JWTトークン生成
     const token = jwt.sign(
       {
-        userId: newUser.id,
+        id: newUser.id.toString(),
         email: newUser.email,
         username: newUser.username,
-        userIdString: newUser.user_id,
+        userId: newUser.user_id,
       },
       process.env.JWT_SECRET || "fallback-secret",
       { expiresIn: "7d" }
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
       {
         message: "アカウント作成成功",
         user: {
-          id: newUser.id,
+          id: newUser.id.toString(),
           email: newUser.email,
           username: newUser.username,
           userId: newUser.user_id,
