@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { useUserStore } from "@/stores/user-stores";
 
 interface ProfileEditModalProps {
   children: React.ReactNode;
@@ -25,6 +26,7 @@ export default function ProfileEditModal({ children }: ProfileEditModalProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false); // api/uploadの処理中を管理
   const [isPending, startTransition] = useTransition(); // router.refresh()のためにuseTransitionを使用
+  const { fetchUser } = useUserStore();
 
   useEffect(() => {
     if (open) {
@@ -79,6 +81,7 @@ export default function ProfileEditModal({ children }: ProfileEditModalProps) {
 
       startTransition(() => {
         router.refresh();
+        fetchUser();
         setOpen(false);
         setIsSubmitting(false);
       });
