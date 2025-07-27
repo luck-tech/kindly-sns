@@ -44,7 +44,8 @@ export default function AuthForm({ type }: AuthFormProps) {
       const data = await res.json();
       if (res.ok) {
         if (type === "signup") {
-          router.push("/login");
+          const userId = data.user.userId;
+          router.push(`/profile/${userId}`);
         } else {
           router.push("/");
         }
