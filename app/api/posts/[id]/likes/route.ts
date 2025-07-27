@@ -35,21 +35,17 @@ export async function POST(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> } // paramsでpostIdを取得
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = getAuthUser(request); // ログイン中のユーザーを取得
     if (!user) {
-      // ログイン中のユーザーではなかったらエラーを返す。
-      return NextResponse.json(
-        { message: "認証エラー" },
-        { status: 401 } // 401は「認証されていない」という意味のステータスコード
-      );
+      return NextResponse.json({ error: "認証エラー" }, { status: 401 });
     }
 
     const { id } = await params;
     const sql = "DELETE FROM likes WHERE user_id = $1 AND post_id = $2";
-    const userId = user.userId;
+    const userId = user.id;
     const postId = parseInt(id, 10);
 
     await query(sql, [userId, postId]);

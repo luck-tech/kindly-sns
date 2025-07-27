@@ -39,7 +39,10 @@ Transform this text:
 
 export async function GET(request: NextRequest) {
   try {
-    // ホーム画面用の投稿一覧取得クエリ
+    // ログインユーザー取得（未ログインならnull）
+    const user = getAuthUser(request);
+
+    // 投稿一覧取得クエリ
     const result = await query(`
       SELECT 
         p.id,
@@ -57,7 +60,22 @@ export async function GET(request: NextRequest) {
       LIMIT 50
     `);
 
-    // データの型変換
+    // 投稿ID一覧
+    const postIds = result.rows.map((row) => Number(row.id));
+
+    // ログインユーザーがいいねした投稿一覧を取得
+    let likedMap: Record<number, boolean> = {};
+    if (user && postIds.length > 0) {
+      const likesResult = await query(
+        `SELECT post_id FROM likes WHERE user_id = $1 AND post_id = ANY($2::bigint[])`,
+        [user.userId, postIds]
+      );
+      likedMap = Object.fromEntries(
+        likesResult.rows.map((r) => [Number(r.post_id), true])
+      );
+    }
+
+    // データの型変換＋liked付与
     const posts = result.rows.map((row) => ({
       id: row.id,
       content: row.content,
@@ -68,6 +86,7 @@ export async function GET(request: NextRequest) {
         icon_url: row.icon_url,
       },
       like_count: parseInt(row.like_count) || 0,
+      liked: !!likedMap[row.id], // ログインユーザーがいいね済みか
     }));
 
     return NextResponse.json(
