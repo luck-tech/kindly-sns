@@ -12,9 +12,11 @@ const hachiMaruPop = Hachi_Maru_Pop({
 const siteName = "Kindo";
 const description =
   "SNSに少し疲れちゃったあなたへ。Kindoは、悪口や批判のない安心できる居場所です。ここでは、みんなの言葉がAIの魔法で優しくなります。";
-const url = "https://kindly-sns.vercel.app/";
+const url = "https://kindly-sns.vercel.app";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(url),
+
   title: {
     default: siteName,
     template: `%s | ${siteName}`,
