@@ -180,7 +180,7 @@ export async function POST(request: NextRequest) {
       `INSERT INTO posts (user_id, content) 
        VALUES ($1, $2) 
        RETURNING id, content, created_at`,
-      [user.userId, transformedContent]
+      [user.id, transformedContent]
     );
 
     const newPost = result.rows[0];
@@ -188,7 +188,7 @@ export async function POST(request: NextRequest) {
     // ユーザー情報を取得
     const userResult = await query(
       `SELECT username, user_id, icon_url FROM users WHERE id = $1`,
-      [user.userId]
+      [user.id]
     );
 
     const userInfo = userResult.rows[0];
