@@ -45,10 +45,10 @@ export async function POST(request: NextRequest) {
     // JWTトークン生成
     const token = jwt.sign(
       {
-        userId: Number(user.id),
+        id: user.id,
         email: user.email,
         username: user.username,
-        userIdString: user.user_id,
+        userId: user.user_id,
       },
       process.env.JWT_SECRET || "fallback-secret",
       { expiresIn: "7d" }

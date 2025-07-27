@@ -3,10 +3,10 @@ import { NextRequest } from "next/server";
 import { z } from "zod";
 
 const JWTPayloadSchema = z.object({
-  userId: z.number(),
+  id: z.string(),
   email: z.string().email(),
   username: z.string(),
-  userIdString: z.string(),
+  userId: z.string(),
   iat: z.number().int().optional(),
   exp: z.number().int().optional(),
 });
@@ -21,7 +21,7 @@ export function getAuthUser(request: NextRequest): JWTPayload | null {
       token,
       process.env.JWT_SECRET ?? "fallback-secret"
     );
-
+    console.log(rawPayload);
     if (typeof rawPayload === "object" && rawPayload !== null) {
       const parsed = JWTPayloadSchema.safeParse(rawPayload);
       if (parsed.success) {

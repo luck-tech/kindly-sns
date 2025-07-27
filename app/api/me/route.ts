@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
   }
 
   const result = await query(
-    `SELECT username, user_id, icon_url FROM users WHERE id = $1`,
+    `SELECT username, user_id, icon_url FROM users WHERE user_id = $1`,
     [user.userId]
   );
   const profile = result.rows[0];
@@ -62,7 +62,7 @@ export async function PUT(request: NextRequest) {
   // user_id重複チェック
   if (user_id) {
     const check = await query(
-      `SELECT id FROM users WHERE user_id = $1 AND id != $2`,
+      `SELECT id FROM users WHERE user_id = $1 AND user_id != $2`,
       [user_id, user.userId]
     );
     if (check.rows.length > 0) {
@@ -78,12 +78,12 @@ export async function PUT(request: NextRequest) {
       username = COALESCE($1, username), 
       icon_url = COALESCE($2, icon_url), 
       user_id = COALESCE($3, user_id) 
-      WHERE id = $4`,
+      WHERE user_id = $4`,
     [username, icon_url, user_id, user.userId]
   );
 
   const result = await query(
-    `SELECT username, user_id, icon_url FROM users WHERE id = $1`,
+    `SELECT username, user_id, icon_url FROM users WHERE user_id = $1`,
     [user.userId]
   );
   const profile = result.rows[0];
