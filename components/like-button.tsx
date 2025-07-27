@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ThumbsUp } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type LikeButtonProps = {
   postId: number;
@@ -14,6 +15,7 @@ export default function LikeButton({
   liked,
   likeCount,
 }: LikeButtonProps) {
+  const router = useRouter();
   const [isLiked, setIsLiked] = useState(liked);
   const [count, setCount] = useState(likeCount);
   const [loading, setLoading] = useState(false);
@@ -34,8 +36,9 @@ export default function LikeButton({
     if (!res.ok) {
       setIsLiked(isLiked);
       setCount((prev) => prev + (isLiked ? 1 : -1));
-      // 必要ならエラーメッセージ表示
     }
+
+    router.refresh();
 
     setLoading(false);
   };
