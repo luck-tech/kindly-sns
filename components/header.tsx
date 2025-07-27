@@ -11,25 +11,34 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
+type UserProfile = {
+  user_id: string;
+  icon_url: string;
+  username: string;
+};
+
 const Header = () => {
   const router = useRouter();
-  const [userId, setUserId] = useState<string | null>(null);
+  const [user, setUser] = useState<UserProfile | null>(null);
 
-  // ユーザーID取得
+  // ユーザー情報取得
   useEffect(() => {
-    const fetchUserId = async () => {
+    const fetchUser = async () => {
       try {
         const res = await fetch("/api/me");
         if (res.ok) {
           const data = await res.json();
-          console.log(data);
-          setUserId(data.user_id);
+          setUser({
+            user_id: data.user_id,
+            icon_url: data.icon_url,
+            username: data.username,
+          });
         }
       } catch (e) {
         // エラー時は何もしない
       }
     };
-    fetchUserId();
+    fetchUser();
   }, []);
 
   // ログアウト処理を行う関数
@@ -40,7 +49,6 @@ const Header = () => {
       });
 
       if (response.ok) {
-        // ログアウト成功後、ログインページに遷移
         router.push("/login");
       } else {
         console.error("Logout failed");
@@ -65,17 +73,19 @@ const Header = () => {
         <PopoverTrigger>
           <Avatar>
             <AvatarImage
-              src="https://github.com/shadcn.png"
+              src={user?.icon_url || ""}
               alt="プロフィール画像"
               className="h-full w-auto aspect-square cursor-pointer"
             />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarFallback>
+              {user?.username ? user.username.charAt(0) : "?"}
+            </AvatarFallback>
           </Avatar>
         </PopoverTrigger>
         <PopoverContent className="mr-4">
           <div className="flex flex-col space-y-2">
             <Link
-              href={`/profile/${userId}`}
+              href={`/profile/${user?.user_id ?? ""}`}
               className="p-2 text-sm hover:bg-gray-100 rounded-md"
             >
               プロフィール

@@ -43,10 +43,10 @@ export async function POST(request: NextRequest) {
 
     // ユーザーを作成
     const result = await query(
-      `INSERT INTO users (email, password_hash, username, user_id, icon_url) 
-       VALUES ($1, $2, $3, $4, $5) 
+      `INSERT INTO users (email, password_hash, username, user_id) 
+       VALUES ($1, $2, $3, $4) 
        RETURNING id, email, username, user_id`,
-      [email, passwordHash, username || "ユーザー", userId, "/logo.png"]
+      [email, passwordHash, username || "ユーザー", userId]
     );
 
     const newUser = result.rows[0];
