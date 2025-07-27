@@ -7,6 +7,7 @@ export type ProfileType = {
   email: string;
   username:string;
   user_id: string;
+  icon_url:string;
 };
 
 export type ProfilePerson = "self" | "others";
