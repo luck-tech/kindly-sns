@@ -4,14 +4,14 @@ import { getAuthUser } from "@/lib/auth"; // 認証用の関数をインポー�
 
 export async function GET(
   request: NextRequest,
-  props: { params: Promise<{ id: string }> },
+  props: { params: Promise<{ id: string }> }
 ) {
   try {
     // 1. プロフィールページのユーザーIDを取得
     const { id: profileUserId } = await props.params;
 
     // 2. 現在ログインしているユーザーの情報を取得（未ログインならnull）
-    const loggedInUser = getAuthUser(request);
+    const loggedInUser = await getAuthUser();
 
     // 3. プロフィールユーザーがいいねした投稿一覧を取得するクエリ（変更なし）
     const result = await query(
@@ -33,7 +33,7 @@ export async function GET(
       ORDER BY p.created_at DESC
       LIMIT 50
       `,
-      [profileUserId],
+      [profileUserId]
     );
 
     // 4. 取得した投稿のID一覧を作成
@@ -45,11 +45,11 @@ export async function GET(
       const likesResult = await query(
         // ログインユーザーID と 取得した投稿IDリスト で絞り込み
         `SELECT post_id FROM likes WHERE user_id = $1 AND post_id = ANY($2::bigint[])`,
-        [loggedInUser.id, postIds], // loggedInUser.id はDBのusersテーブルの主キー
+        [loggedInUser.id, postIds] // loggedInUser.id はDBのusersテーブルの主キー
       );
       // { "投稿ID": true } のような形式のオブジェクトに変換
       likedMap = Object.fromEntries(
-        likesResult.rows.map((r) => [Number(r.post_id), true]),
+        likesResult.rows.map((r) => [Number(r.post_id), true])
       );
     }
 
@@ -73,13 +73,13 @@ export async function GET(
         posts,
         count: posts.length,
       },
-      { status: 200 },
+      { status: 200 }
     );
   } catch (error) {
     console.error("いいねした投稿の取得エラー:", error);
     return NextResponse.json(
       { error: "投稿の取得に失敗しました" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

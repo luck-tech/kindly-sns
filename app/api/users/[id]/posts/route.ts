@@ -4,11 +4,11 @@ import { getAuthUser } from "@/lib/auth";
 
 export async function GET(
   request: NextRequest,
-  props: { params: Promise<{ id: string }> },
+  props: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id: profileUserId } = await props.params;
-    const loggedInUser = getAuthUser(request);
+    const loggedInUser = await getAuthUser();
 
     const result = await query(
       `
@@ -28,7 +28,7 @@ export async function GET(
       ORDER BY p.created_at DESC
       LIMIT 50
       `,
-      [profileUserId],
+      [profileUserId]
     );
 
     const postIds = result.rows.map((row) => Number(row.id));
@@ -37,10 +37,10 @@ export async function GET(
     if (loggedInUser && postIds.length > 0) {
       const likesResult = await query(
         `SELECT post_id FROM likes WHERE user_id = $1 AND post_id = ANY($2::bigint[])`,
-        [loggedInUser.id, postIds],
+        [loggedInUser.id, postIds]
       );
       likedMap = Object.fromEntries(
-        likesResult.rows.map((r) => [Number(r.post_id), true]),
+        likesResult.rows.map((r) => [Number(r.post_id), true])
       );
     }
 
@@ -62,13 +62,13 @@ export async function GET(
         posts,
         count: posts.length,
       },
-      { status: 200 },
+      { status: 200 }
     );
   } catch (error) {
     console.error("ユーザーの投稿取得エラー:", error);
     return NextResponse.json(
       { error: "投稿の取得に失敗しました" },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
