@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -13,10 +13,29 @@ import {
 
 const Header = () => {
   const router = useRouter();
+  const [userId, setUserId] = useState<string | null>(null);
+
+  // ユーザーID取得
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const res = await fetch("/api/me");
+        if (res.ok) {
+          const data = await res.json();
+          console.log(data);
+          setUserId(data.user_id);
+        }
+      } catch (e) {
+        // エラー時は何もしない
+      }
+    };
+    fetchUserId();
+  }, []);
+
   // ログアウト処理を行う関数
   const handleLogout = async () => {
     try {
-      const response = await fetch("api/auth/logout", {
+      const response = await fetch("/api/auth/logout", {
         method: "POST",
       });
 
@@ -56,12 +75,11 @@ const Header = () => {
         <PopoverContent className="mr-4">
           <div className="flex flex-col space-y-2">
             <Link
-              href="/profile"
+              href={`/profile/${userId}`}
               className="p-2 text-sm hover:bg-gray-100 rounded-md"
             >
               プロフィール
             </Link>
-
             <button
               className="p-2 text-sm text-red-500 cursor-pointer text-left hover:bg-gray-100 rounded-md"
               type="button"
