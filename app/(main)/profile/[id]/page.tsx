@@ -8,19 +8,26 @@ export default async function Profile(props: {
 }) {
   const { id } = await props.params;
 
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL ?? ""}/api/users/${id}`
+  );
+  const data = await res.json();
+
   return (
     <div className="flex flex-col items-center mt-[36px]">
       <Avatar className="flex justify-center w-[128px] h-[128px]">
         <AvatarImage
-          src="https://github.com/shadcn.png"
+          src={data.icon_url || ""}
           alt="プロフィール画像"
           className="h-full w-auto aspect-square cursor-pointer"
         />
-        <AvatarFallback>CN</AvatarFallback>
+        <AvatarFallback>
+          {data.username ? data.username.charAt(0) : "?"}
+        </AvatarFallback>
       </Avatar>
       <div className="mt-[16px] flex flex-col items-center">
-        <p className="text-[22px] text-[#171412]">アリサ コーピー</p>
-        <p className="text-[16px] text-[#827066]">@alisacooper</p>
+        <p className="text-[22px] text-[#171412]">{data.username}</p>
+        <p className="text-[16px] text-[#827066]">@{data.user_id}</p>
       </div>
       <ProfileEditModal>
         <button

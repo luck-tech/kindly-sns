@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthUser } from "@/lib/auth";
 import { query } from "@/lib/db";
+import { revalidatePath } from "next/cache";
 
 export async function GET(request: NextRequest) {
   const user = getAuthUser(request);
@@ -82,11 +83,14 @@ export async function PUT(request: NextRequest) {
     [username, icon_url, user_id, user.userId]
   );
 
+  // 変更後のユーザーIDを取得（user_idが変更された場合に備えて）
   const result = await query(
-    `SELECT username, user_id, icon_url FROM users WHERE user_id = $1`,
-    [user.userId]
+    `SELECT username, user_id, icon_url FROM users WHERE user_id = COALESCE($1, $2)`,
+    [user_id, user.userId]
   );
   const profile = result.rows[0];
+
+  revalidatePath(`/profile/${profile.user_id}`);
 
   return NextResponse.json(
     {
