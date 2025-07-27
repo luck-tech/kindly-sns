@@ -20,8 +20,6 @@ export type PostType = {
 //表示モード
 export type ViewMode = "self" | "like" | "latest";
 
-
-
 export const PostList = ({
   mode,
   allPosts,
@@ -69,7 +67,9 @@ export const PostList = ({
             </Avatar>
             <div className="flex flex-col w-full ml-[16px]">
               <div className="flex items-center gap-[12px]">
-                <p className="text-[14px] text-[#171412]">{post.user.username}</p>
+                <p className="text-[14px] text-[#171412]">
+                  {post.user.username}
+                </p>
                 <p className="text-sm text-gray-500">{dateDisplayText}</p>
               </div>
               <p className="text-gray-800">{post.content}</p>

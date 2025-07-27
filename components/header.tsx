@@ -1,9 +1,9 @@
 "use client";
 
-import React,{ useEffect,useState}from "react";
-import { useRouter } from "next/navigation";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   Popover,
@@ -33,7 +33,7 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed w-full h-16 px-6 py-2 bg-white flex justify-between border-b border-gray-200">
+    <header className="fixed w-full h-16 px-6 py-2 bg-white flex justify-between border-b border-gray-200 z-50">
       <Link href="/">
         <Image
           src="/logo.png"
@@ -57,9 +57,10 @@ const Header = () => {
         <PopoverContent className="mr-4">
           <div className="flex flex-col space-y-2">
             <Link
-              href={`/profile/`}
+              href="/profile"
               className="p-2 text-sm hover:bg-gray-100 rounded-md"
-            >プロフィール
+            >
+              プロフィール
             </Link>
 
             <button
