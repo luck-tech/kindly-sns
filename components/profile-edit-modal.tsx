@@ -26,24 +26,19 @@ export default function ProfileEditModal({ children }: ProfileEditModalProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false); // api/uploadの処理中を管理
   const [isPending, startTransition] = useTransition(); // router.refresh()のためにuseTransitionを使用
-  const { fetchUser } = useUserStore();
+  const { user, fetchUser } = useUserStore();
 
   useEffect(() => {
     if (open) {
-      const fetchCurrentUser = async () => {
-        try {
-          const res = await fetch("/api/me");
-          if (!res.ok) throw new Error("ユーザー情報の取得に失敗しました");
-          const data = await res.json();
-          setName(data.username);
-          setImagePreview(data.icon_url);
-        } catch (err: any) {
-          toast.error(err.message);
-        }
-      };
-      fetchCurrentUser();
+      // ストアにユーザー情報があれば、それを初期値としてセット
+      if (user) {
+        setName(user.username);
+        setImagePreview(user.icon_url || null);
+      }
+      // モーダルを開くたびに、選択されたファイルはリセットする
+      setSelectedFile(null);
     }
-  }, [open]);
+  }, [open, user]);
 
   // 登録ボタンの処理
   const handleRegister = async () => {
