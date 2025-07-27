@@ -58,7 +58,7 @@ const Header = () => {
               className="h-full w-auto aspect-square cursor-pointer"
             />
             <AvatarFallback>
-              {user?.username ? user.username.charAt(0) : "?"}
+              {user?.username ? user.username.charAt(0) : ""}
             </AvatarFallback>
           </Avatar>
         </PopoverTrigger>
