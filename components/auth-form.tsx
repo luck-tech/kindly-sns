@@ -6,13 +6,15 @@ import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { AuthFormProps } from "@/types/auth";
+import { Loader2 } from "lucide-react";
 
 export default function AuthForm({ type }: AuthFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
-    {},
+    {}
   );
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,6 +31,7 @@ export default function AuthForm({ type }: AuthFormProps) {
     }
     setErrors({});
 
+    setIsLoading(true);
     try {
       const endpoint =
         type === "signup" ? "/api/auth/register" : "/api/auth/login";
@@ -102,9 +105,14 @@ export default function AuthForm({ type }: AuthFormProps) {
           {errors.password}
         </p>
       )}
-
-      <Button variant="loginSignup">
-        {type === "signup" ? "登録" : "ログイン"}
+      <Button variant="loginSignup" disabled={isLoading}>
+        {isLoading ? (
+          <Loader2 className="animate-spin" />
+        ) : type === "signup" ? (
+          "登録"
+        ) : (
+          "ログイン"
+        )}
       </Button>
     </form>
   );
