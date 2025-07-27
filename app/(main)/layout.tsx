@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${hachiMaruPop.className} antialiased`}>
-        <NextTopLoader />
+        <NextTopLoader showSpinner={false} />
         <Header />
         <main className="pt-16">{children}</main>
         <ToastContainer />
