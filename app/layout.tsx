@@ -27,14 +27,13 @@ export const metadata: Metadata = {
     description,
     url,
     siteName,
-    images: [
-      {
-        url: "/ogp-v2.png",
-        width: 1200,
-        height: 630,
-        alt: "OGP画像",
-      },
-    ],
+    images: {
+      url: "/ogp.png",
+      type: "image/png",
+      width: 1200,
+      height: 630,
+      alt: "OGP画像",
+    },
     locale: "ja_JP",
     type: "website",
   },
@@ -42,7 +41,13 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteName,
     description,
-    images: ["/ogp-v2.png"],
+    images: {
+      url: "/ogp.png",
+      type: "image/png",
+      width: 1200,
+      height: 630,
+      alt: "OGP画像",
+    },
   },
 };
 export default function RootLayout({
