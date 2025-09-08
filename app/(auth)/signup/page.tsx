@@ -2,7 +2,7 @@ import AuthForm from "@/components/auth-form";
 
 export default function SignupPage() {
   return (
-    <div className="w-full flex px-[160px] py-20">
+    <div className="w-full flex px-[160px] ">
       <div className="w-full flex flex-col h-[695px] justify-center items-center">
         <p className="text-[28px] mb-6 text-center">おかえりなさい</p>
         <AuthForm type="signup" />
