@@ -52,20 +52,19 @@ const Header = () => {
       </Link>
       <Popover>
         <PopoverTrigger>
-          {isLoading ? (
+          {isLoading ?
             <Skeleton className="h-8 w-8 rounded-full" />
-          ) : (
-            <Avatar>
+          : <Avatar className="cursor-pointer">
               <AvatarImage
                 src={user?.icon_url || ""}
                 alt="プロフィール画像"
-                className="h-full w-auto aspect-square cursor-pointer"
+                className="h-full w-auto aspect-square"
               />
               <AvatarFallback>
                 {user?.username ? user.username.charAt(0) : ""}
               </AvatarFallback>
             </Avatar>
-          )}
+          }
         </PopoverTrigger>
         <PopoverContent className="mr-4">
           <div className="flex flex-col space-y-2">
